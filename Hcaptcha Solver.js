@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Hcaptcha Solver V1
 // @namespace    Hcaptcha Solver Workaround
-// @version       2.6
+// @version       2.7
 // @description  Hcaptcha Solver in Browser | Automatically solves Hcaptcha in browser
 // @author       Moryata
 // @match        https://*.hcaptcha.com/*hcaptcha-challenge*
@@ -123,7 +123,7 @@
     var skipCount = 0;
 
     var USE_MOBILE_NET = true;
-    var USE_COLOUR_PATTERN = true;
+    var USE_COLOUR_PATTERN = false;
     var NEW_WORD_IDENTIFIED = false;
 
     //Probablility for objects

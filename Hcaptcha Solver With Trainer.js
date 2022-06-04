@@ -650,7 +650,7 @@
                     }
                 }
             }
-        }, 3000);
+        }, 5000);
     }
 
     //TODO: Convert Image to base64 to avoid multiple calls

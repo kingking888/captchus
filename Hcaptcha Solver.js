@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Hcaptcha Solver V1
 // @namespace    Hcaptcha Solver Workaround
-// @version       2.5
+// @version       2.6
 // @description  Hcaptcha Solver in Browser | Automatically solves Hcaptcha in browser
 // @author       Moryata
 // @match        https://*.hcaptcha.com/*hcaptcha-challenge*
@@ -527,7 +527,7 @@
                 return;
             }
 
-        }, 20);
+        }, 25);
     } else {
 
         try {
@@ -664,7 +664,7 @@
                     }
                 }
             }
-        }, 3000);
+        }, 5000);
     }
 
     //TODO: Convert Image to base64 to avoid multiple calls

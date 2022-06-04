@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         Allfaucet
-// @namespace    http://tampermonkey.net/
-// @version      1.1
-// @description  Auto Claim from manual faucet using hcaptcha solver! Open https://allfaucet.xyz/?r=6755 and go to manual faucet claim
-// @author       Bidmaster777 (with kind help of neerk)
+// @namespace    AutoClaim
+// @version      1.2
+// @description  Auto Claim from manual faucet
+// @author       Moryata
 // @match        https://allfaucet.xyz/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=allfaucet.xyz
 // @grant        GM_info

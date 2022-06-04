@@ -16,7 +16,7 @@
         if(unsafeWindow.hcaptcha && unsafeWindow.hcaptcha.getResponse() && unsafeWindow.hcaptcha.getResponse().length) {
             document.querySelector(".claim-button").click();
         }
-            }, 2000);
+            }, 1000);
 
 var site = "https://allfaucet.xyz/faucet";
 
@@ -24,6 +24,6 @@ var site = "https://allfaucet.xyz/faucet";
         if($("*:contains('An Error Was Encountered')").length > 0) {
             window.location.href = site;
         }
-            }, 3000);
+            }, 1000);
 
 })();

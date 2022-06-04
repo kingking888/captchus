@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Hcaptcha Solver with Trainer
 // @namespace    Hcaptcha Solver
-// @version      11.2
+// @version      11.3
 // @description  Hcaptcha Solver in Browser | Automatically solves Hcaptcha in browser
 // @author       Moryata
 // @match        https://*.hcaptcha.com/*hcaptcha-challenge*
@@ -1002,7 +1002,7 @@
             }
             identifyObjectsFromImages(exampleImageList);
             while (!identifyObjectsFromImagesCompleted) {
-                await delay(200)
+                await delay(500)
             }
             identifyObjectsFromImagesCompleted = true;
             word = await getWordFromIdentifiedObjects(identifiedObjectsList);
@@ -1013,7 +1013,7 @@
                 await initializeTensorFlowMobilenetModel();
                 identifyObjectsFromImagesUsingMobileNet(exampleImageList);
                 while (!identifyObjectsFromImagesCompleted) {
-                    await delay(200)
+                    await delay(500)
                 }
                 identifyObjectsFromImagesCompleted = true;
 

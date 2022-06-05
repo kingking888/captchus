@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Hcaptcha Solver Mode OCR
 // @namespace     Captchus Model H
-// @version       3.4
+// @version       3.5
 // @description  Automatically solves Hcaptcha in browser
 // @author       Moryata
 // @match        https://*.hcaptcha.com/*hcaptcha-challenge*
@@ -245,7 +245,7 @@
                     .then(function(predictions) {
                     var predictionslen = predictions.length;
                     for (var j = 0; j < predictionslen; j++) {
-                        var probability = 0.055;
+                        var probability = 0.025;
                         if (probabilityForObject.get(predictions[j].className)) {
                             probability = probabilityForObject.get(predictions[j].className);
                         }
@@ -635,7 +635,7 @@
             }else{
 
             }
-        }, 1500);
+        }, 1000);
     }
 
     function waitForImagesToAppear() {
@@ -750,7 +750,7 @@
         Jimp.read(base64Image).then(function(data) {
             data.contrast(1).color([{
                 apply: 'brighten',
-                params: [15]
+                params: [20]
             }
 
                                    ])
@@ -1026,7 +1026,7 @@
             }
             identifyObjectsFromImages(exampleImageList);
             while (!identifyObjectsFromImagesCompleted) {
-                await delay(500)
+                await delay(100)
             }
             identifyObjectsFromImagesCompleted = false;
             word = await getWordFromIdentifiedObjects(identifiedObjectsList);
@@ -1037,7 +1037,7 @@
                 await initializeTensorFlowMobilenetModel();
                 identifyObjectsFromImagesUsingMobileNet(exampleImageList);
                 while (!identifyObjectsFromImagesCompleted) {
-                    await delay(500)
+                    await delay(100)
                 }
                 identifyObjectsFromImagesCompleted = false;
 
@@ -1122,7 +1122,7 @@
             for (let i = 0; i < qSelectorAll(LANGUAGE_SELECTOR).length; i++) {
                 if (qSelectorAll(LANGUAGE_SELECTOR)[i].innerText == DEFAULT_LANGUAGE) {
                     document.querySelectorAll(LANGUAGE_SELECTOR)[i].click();
-                    await delay(50);
+                    await delay(550);
                 }
             }
         }

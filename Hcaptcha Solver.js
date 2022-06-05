@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Hcaptcha Solver Mode OCR
 // @namespace     Captchus Model H
-// @version       3.2
+// @version       3.3
 // @description  Automatically solves Hcaptcha in browser
 // @author       Moryata
 // @match        https://*.hcaptcha.com/*hcaptcha-challenge*
@@ -50,7 +50,7 @@
 
     //Guess/Match New Images
     const MATCH_IMAGES_USING_TRAINER = false;
-    const GUESS_NEW_IMAGE_TYPE = false;
+    const GUESS_NEW_IMAGE_TYPE = true;
 
     //Node Selectors
     const CHECK_BOX = "#checkbox";
@@ -245,7 +245,7 @@
                     .then(function(predictions) {
                     var predictionslen = predictions.length;
                     for (var j = 0; j < predictionslen; j++) {
-                        var probability = 0.035;
+                        var probability = 0.015;
                         if (probabilityForObject.get(predictions[j].className)) {
                             probability = probabilityForObject.get(predictions[j].className);
                         }
@@ -304,8 +304,8 @@
 
                         //Multiple combinations and distances are required for accuracy
                         for (let i = 0; i < data.length; i+= 4) {
-                            if( (data[i] < 150 && data[i+1] < 105 && data[i+2] > 80 && data[i+3] == 255) ||
-                               (data[i] < 200 && data[i+1] < 200 && data[i+2] > 150 && data[i+3] == 255)){
+                            if( (data[i] < 130 && data[i+1] < 105 && data[i+2] > 80 && data[i+3] == 255) ||
+                               (data[i] < 200 && data[i+1] < 200 && data[i+2] > 130 && data[i+3] == 255)){
                                 count++;
                             }
                         }
@@ -635,7 +635,7 @@
             }else{
 
             }
-        }, 500);
+        }, 1500);
     }
 
     function waitForImagesToAppear() {
@@ -676,14 +676,14 @@
 
                 {
                     apply: 'darken',
-                    params: [15]
+                    params: [20]
                 }
 
             ]).color([
 
                 {
                     apply: 'brighten',
-                    params: [15]
+                    params: [25]
                 }
 
             ])
@@ -716,7 +716,7 @@
 
                 {
                     apply: 'darken',
-                    params: [25]
+                    params: [20]
                 }
 
             ]).contrast(1).color([

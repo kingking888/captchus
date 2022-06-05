@@ -676,14 +676,14 @@
 
                 {
                     apply: 'darken',
-                    params: [20]
+                    params: [17]
                 }
 
             ]).color([
 
                 {
                     apply: 'brighten',
-                    params: [20]
+                    params: [17]
                 }
 
             ])
@@ -723,7 +723,7 @@
 
                 {
                     apply: 'brighten',
-                    params: [25]
+                    params: [15]
                 }
 
             ]).contrast(1).greyscale().getBase64(Jimp.AUTO, function(err, src) {
@@ -750,7 +750,7 @@
         Jimp.read(base64Image).then(function(data) {
             data.contrast(1).color([{
                 apply: 'brighten',
-                params: [10]
+                params: [15]
             }
 
                                    ])

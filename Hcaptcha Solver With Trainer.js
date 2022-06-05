@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Hcaptcha Solver Mode Trainer
 // @namespace     Captchus Model H Plus
-// @version      12.0
+// @version      12.1
 // @description  Automatically solves Hcaptcha in browser
 // @author       Moryata
 // @match        https://*.hcaptcha.com/*hcaptcha-challenge*
@@ -35,7 +35,7 @@
 
     var identifiedObjectsList = [];
     var exampleImageList = [];
-    var identifyObjectsFromImagesCompleted = false;
+    var identifyObjectsFromImagesCompleted = true;
     var currentExampleUrls = [];
 
     //Default Language for hcaptcha
@@ -300,7 +300,7 @@
 
                         //Multiple combinations and distances are required for accuracy
                         for (let i = 0; i < data.length; i+= 4) {
-                            if( (data[i] < 140 && data[i+1] < 110 && data[i+2] > 80 && data[i+3] == 255) ||
+                            if( (data[i] < 150 && data[i+1] < 110 && data[i+2] > 80 && data[i+3] == 255) ||
                                (data[i] < 200 && data[i+1] < 200 && data[i+2] > 140 && data[i+3] == 255)){
                                 count++;
                             }
@@ -713,7 +713,7 @@
                     params: [15]
                 }
 
-            ]).contrast().greyscale().getBase64(Jimp.AUTO, function(err, src) {
+            ]).contrast(2).greyscale().getBase64(Jimp.AUTO, function(err, src) {
                 var img = document.createElement("img");
                 img.setAttribute("src", src);
 

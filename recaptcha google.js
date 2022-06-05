@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Recaptcha Solver
 // @namespace    Recaptcha Solver
-// @version      2.2
+// @version      2.3
 // @description  Recaptcha Solver in Browser | Automatically solves Recaptcha in browser
 // @author       moryata
 // @match        *://*/recaptcha/*
@@ -54,7 +54,7 @@ This script uses audio in order to solve the captcha. Use it wisely and do not a
     }
 
     async function getTextFromAudio(URL) {
-        var minLatency = 500;
+        var minLatency = 250;
         var url = "";
 
         //Selecting the last/latest server by default if latencies are equal
@@ -80,7 +80,7 @@ This script uses audio in order to solve the captcha. Use it wisely and do not a
                 "Content-Type": "application/x-www-form-urlencoded"
             },
             data: "input=" + encodeURIComponent(URL) + "&lang=" + recaptchaLanguage,
-            timeout: 5000,
+            timeout: 10000,
             onload: function(response) {
                 console.log("Response::" + response.responseText);
                 try {
@@ -127,7 +127,7 @@ This script uses audio in order to solve the captcha. Use it wisely and do not a
                 "Content-Type": "application/x-www-form-urlencoded"
             },
             data: "",
-            timeout: 3000,
+            timeout: 10000,
             onload: function(response) {
 
                 if(response && response.responseText && response.responseText=="0") {
@@ -221,6 +221,6 @@ This script uses audio in order to solve the captcha. Use it wisely and do not a
             console.log("An error occurred while solving. Stopping the solver.");
             clearInterval(startInterval);
         }
-    }, 1000);
+    }, 2500);
 
 })();

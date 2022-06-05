@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Hcaptcha Solver Mode OCR
 // @namespace     Captchus Model H
-// @version       2.9
+// @version       3.0
 // @description  Automatically solves Hcaptcha in browser
 // @author       Moryata
 // @match        https://*.hcaptcha.com/*hcaptcha-challenge*
@@ -189,7 +189,7 @@
                 "Content-Type": "application/x-www-form-urlencoded"
             },
             data: "image=" + encodeURIComponent(imageUrl),
-            timeout: 10000,
+            timeout: 9999,
             onload: function(response) {
                 clickImages(response, imageUrl, word, i)
             },
@@ -245,7 +245,7 @@
                     .then(function(predictions) {
                     var predictionslen = predictions.length;
                     for (var j = 0; j < predictionslen; j++) {
-                        var probability = 0.025;
+                        var probability = 0.035;
                         if (probabilityForObject.get(predictions[j].className)) {
                             probability = probabilityForObject.get(predictions[j].className);
                         }
@@ -676,14 +676,14 @@
 
                 {
                     apply: 'darken',
-                    params: [17]
+                    params: [15]
                 }
 
             ]).color([
 
                 {
                     apply: 'brighten',
-                    params: [17]
+                    params: [15]
                 }
 
             ])

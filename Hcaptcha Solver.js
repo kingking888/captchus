@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Hcaptcha Solver Mode OCR
-// @namespace     Captchus Model H
+// @namespace    Captchus Model H
 // @version       3.9
 // @description  Automatically solves Hcaptcha in browser
 // @author       Moryata

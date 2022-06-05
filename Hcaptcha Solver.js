@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Hcaptcha Solver Mode OCR
 // @namespace    Captchus Model H
-// @version       3.9
+// @version       4.0
 // @description  Automatically solves Hcaptcha in browser
 // @author       Moryata
 // @match        https://*.hcaptcha.com/*hcaptcha-challenge*
@@ -245,7 +245,7 @@
                     .then(function(predictions) {
                     var predictionslen = predictions.length;
                     for (var j = 0; j < predictionslen; j++) {
-                        var probability = 0.025;
+                        var probability = 0.055;
                         if (probabilityForObject.get(predictions[j].className)) {
                             probability = probabilityForObject.get(predictions[j].className);
                         }
@@ -304,7 +304,7 @@
 
                         //Multiple combinations and distances are required for accuracy
                         for (let i = 0; i < data.length; i+= 4) {
-                            if( (data[i] < 150 && data[i+1] < 105 && data[i+2] > 80 && data[i+3] == 255) ||
+                            if( (data[i] < 140 && data[i+1] < 115 && data[i+2] > 90 && data[i+3] == 255) ||
                                (data[i] < 200 && data[i+1] < 200 && data[i+2] > 140 && data[i+3] == 255)){
                                 count++;
                             }
@@ -676,14 +676,14 @@
 
                 {
                     apply: 'darken',
-                    params: [25]
+                    params: [15]
                 }
 
             ]).color([
 
                 {
                     apply: 'brighten',
-                    params: [25]
+                    params: [15]
                 }
 
             ])
@@ -716,14 +716,14 @@
 
                 {
                     apply: 'darken',
-                    params: [25]
+                    params: [15]
                 }
 
             ]).contrast(1).color([
 
                 {
                     apply: 'brighten',
-                    params: [25]
+                    params: [15]
                 }
 
             ]).contrast(1).greyscale().getBase64(Jimp.AUTO, function(err, src) {
@@ -750,7 +750,7 @@
         Jimp.read(base64Image).then(function(data) {
             data.contrast(1).color([{
                 apply: 'brighten',
-                params: [25]
+                params: [15]
             }
 
                                    ])
@@ -1028,7 +1028,7 @@
             while (!identifyObjectsFromImagesCompleted) {
                 await delay(100)
             }
-            identifyObjectsFromImagesCompleted = false;
+            identifyObjectsFromImagesCompleted = true;
             word = await getWordFromIdentifiedObjects(identifiedObjectsList);
 
             //Word has not been identified yet, use mobile net to recognize images
@@ -1039,7 +1039,7 @@
                 while (!identifyObjectsFromImagesCompleted) {
                     await delay(100)
                 }
-                identifyObjectsFromImagesCompleted = false;
+                identifyObjectsFromImagesCompleted = true;
 
                 word = getWordFromIdentifiedObjects(identifiedObjectsList);
             }

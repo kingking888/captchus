@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Hcaptcha Solver Mode OCR
 // @namespace     Captchus Model H
-// @version       3.8
+// @version       3.9
 // @description  Automatically solves Hcaptcha in browser
 // @author       Moryata
 // @match        https://*.hcaptcha.com/*hcaptcha-challenge*
@@ -676,7 +676,7 @@
 
                 {
                     apply: 'darken',
-                    params: [20]
+                    params: [25]
                 }
 
             ]).color([
@@ -716,7 +716,7 @@
 
                 {
                     apply: 'darken',
-                    params: [20]
+                    params: [25]
                 }
 
             ]).contrast(1).color([
@@ -778,7 +778,7 @@
         //Resize the image
         Jimp.read(base64Image).then(function(data) {
             data.resize(256, Jimp.AUTO)
-                .quality(95) // set JPEG quality
+                .quality(75) // set JPEG quality
                 .greyscale() // set greyscale
                 .getBase64(Jimp.AUTO, function(err, src) {
                 var img = document.createElement("img");

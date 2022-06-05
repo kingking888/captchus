@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         Hcaptcha Solver with Trainer
-// @namespace    Hcaptcha Solver
-// @version      11.5
-// @description  Hcaptcha Solver in Browser | Automatically solves Hcaptcha in browser
+// @name         Hcaptcha Solver Mode Trainer
+// @namespace  Captchus Model H Plus
+// @version      11.6
+// @description  Automatically solves Hcaptcha in browser
 // @author       Moryata
 // @match        https://*.hcaptcha.com/*hcaptcha-challenge*
 // @match        https://*.hcaptcha.com/*checkbox*
@@ -621,7 +621,7 @@
             }else{
 
             }
-        }, 1000);
+        }, 500);
     }
 
     function waitForImagesToAppear() {
@@ -669,7 +669,7 @@
 
                 {
                     apply: 'brighten',
-                    params: [15]
+                    params: [20]
                 }
 
             ])

@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         Hcaptcha Solver V1
-// @namespace    Hcaptcha Solver Workaround
-// @version       2.7
-// @description  Hcaptcha Solver in Browser | Automatically solves Hcaptcha in browser
+// @name         Hcaptcha Solver Mode OCR
+// @namespace  Captchus Model H
+// @version       2.8
+// @description  Automatically solves Hcaptcha in browser
 // @author       Moryata
 // @match        https://*.hcaptcha.com/*hcaptcha-challenge*
 // @match        https://*.hcaptcha.com/*hcaptcha*
@@ -635,7 +635,7 @@
             }else{
 
             }
-        }, 1000);
+        }, 500);
     }
 
     function waitForImagesToAppear() {
@@ -676,7 +676,7 @@
 
                 {
                     apply: 'darken',
-                    params: [20]
+                    params: [25]
                 }
 
             ]).color([
@@ -716,14 +716,14 @@
 
                 {
                     apply: 'darken',
-                    params: [20]
+                    params: [25]
                 }
 
             ]).contrast(1).color([
 
                 {
                     apply: 'brighten',
-                    params: [20]
+                    params: [15]
                 }
 
             ]).contrast(1).greyscale().getBase64(Jimp.AUTO, function(err, src) {
@@ -748,9 +748,9 @@
     function preProcessImageMethod3(base64Image, imageUrl) {
         //Multi Contrast only brighten
         Jimp.read(base64Image).then(function(data) {
-            data.contrast(1).color([{
+            data.contrast(2).color([{
                 apply: 'brighten',
-                params: [20]
+                params: [25]
             }
 
                                    ])
@@ -778,7 +778,7 @@
         //Resize the image
         Jimp.read(base64Image).then(function(data) {
             data.resize(256, Jimp.AUTO)
-                .quality(60) // set JPEG quality
+                .quality(95) // set JPEG quality
                 .greyscale() // set greyscale
                 .getBase64(Jimp.AUTO, function(err, src) {
                 var img = document.createElement("img");
@@ -1026,7 +1026,7 @@
             }
             identifyObjectsFromImages(exampleImageList);
             while (!identifyObjectsFromImagesCompleted) {
-                await delay(1000)
+                await delay(500)
             }
             identifyObjectsFromImagesCompleted = false;
             word = await getWordFromIdentifiedObjects(identifiedObjectsList);
@@ -1037,7 +1037,7 @@
                 await initializeTensorFlowMobilenetModel();
                 identifyObjectsFromImagesUsingMobileNet(exampleImageList);
                 while (!identifyObjectsFromImagesCompleted) {
-                    await delay(1000)
+                    await delay(500)
                 }
                 identifyObjectsFromImagesCompleted = false;
 

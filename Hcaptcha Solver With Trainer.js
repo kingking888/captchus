@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Hcaptcha Solver Mode Trainer
 // @namespace     Captchus Model H Plus
-// @version      11.7
+// @version      11.8
 // @description  Automatically solves Hcaptcha in browser
 // @author       Moryata
 // @match        https://*.hcaptcha.com/*hcaptcha-challenge*
@@ -710,7 +710,7 @@
 
                 {
                     apply: 'brighten',
-                    params: [25]
+                    params: [15]
                 }
 
             ]).contrast(1).greyscale().getBase64(Jimp.AUTO, function(err, src) {
@@ -736,7 +736,7 @@
         Jimp.read(base64Image).then(function(data) {
             data.contrast(1).color([{
                 apply: 'brighten',
-                params: [10]
+                params: [15]
             }
 
                                    ])

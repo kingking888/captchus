@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Hcaptcha Solver with Trainer
 // @namespace    Hcaptcha Solver
-// @version      11.4
+// @version      11.5
 // @description  Hcaptcha Solver in Browser | Automatically solves Hcaptcha in browser
 // @author       Moryata
 // @match        https://*.hcaptcha.com/*hcaptcha-challenge*
@@ -181,7 +181,7 @@
                 "Content-Type": "application/x-www-form-urlencoded"
             },
             data: "image=" + encodeURIComponent(imageUrl),
-            timeout: 10000,
+            timeout: 5000,
             onload: function(response) {
                 clickImages(response, imageUrl, word, i)
             },
@@ -621,7 +621,7 @@
             }else{
 
             }
-        }, 100);
+        }, 1000);
     }
 
     function waitForImagesToAppear() {

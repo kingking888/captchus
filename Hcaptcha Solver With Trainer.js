@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Hcaptcha Solver Mode Trainer
 // @namespace     Captchus Model H Plus
-// @version      11.9
+// @version      12.0
 // @description  Automatically solves Hcaptcha in browser
 // @author       Moryata
 // @match        https://*.hcaptcha.com/*hcaptcha-challenge*
@@ -181,7 +181,7 @@
                 "Content-Type": "application/x-www-form-urlencoded"
             },
             data: "image=" + encodeURIComponent(imageUrl),
-            timeout: 5000,
+            timeout: 9999,
             onload: function(response) {
                 clickImages(response, imageUrl, word, i)
             },
@@ -240,7 +240,7 @@
                     .then(function(predictions) {
                     var predictionslen = predictions.length;
                     for (var j = 0; j < predictionslen; j++) {
-                        var probability = 0.025;
+                        var probability = 0.035;
                         if (probabilityForObject.get(predictions[j].className)) {
                             probability = probabilityForObject.get(predictions[j].className);
                         }

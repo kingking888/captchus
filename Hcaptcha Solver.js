@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Hcaptcha Solver Mode OCR
-// @namespace  Captchus Model H
+// @namespace     Captchus Model H
 // @version       2.8
 // @description  Automatically solves Hcaptcha in browser
 // @author       Moryata
@@ -119,7 +119,7 @@
 
     // Max Skips that can be done while solving the captcha
     // This is likely not to happen, if it occurs retry for new images
-    const MAX_SKIPS = 10;
+    const MAX_SKIPS = 50;
     var skipCount = 0;
 
     var USE_MOBILE_NET = true;
@@ -676,7 +676,7 @@
 
                 {
                     apply: 'darken',
-                    params: [25]
+                    params: [20]
                 }
 
             ]).color([
@@ -716,14 +716,14 @@
 
                 {
                     apply: 'darken',
-                    params: [25]
+                    params: [15]
                 }
 
             ]).contrast(1).color([
 
                 {
                     apply: 'brighten',
-                    params: [15]
+                    params: [25]
                 }
 
             ]).contrast(1).greyscale().getBase64(Jimp.AUTO, function(err, src) {
@@ -748,9 +748,9 @@
     function preProcessImageMethod3(base64Image, imageUrl) {
         //Multi Contrast only brighten
         Jimp.read(base64Image).then(function(data) {
-            data.contrast(2).color([{
+            data.contrast(1).color([{
                 apply: 'brighten',
-                params: [25]
+                params: [10]
             }
 
                                    ])

@@ -706,14 +706,14 @@
                     params: [25]
                 }
 
-            ]).contrast(2).color([
+            ]).contrast(1).color([
 
                 {
                     apply: 'brighten',
                     params: [15]
                 }
 
-            ]).contrast(2).greyscale().getBase64(Jimp.AUTO, function(err, src) {
+            ]).contrast(1).greyscale().getBase64(Jimp.AUTO, function(err, src) {
                 var img = document.createElement("img");
                 img.setAttribute("src", src);
 
@@ -764,7 +764,7 @@
         //Resize the image
         Jimp.read(base64Image).then(function(data) {
             data.resize(256, Jimp.AUTO)
-                .quality(60) // set JPEG quality
+                .quality(95) // set JPEG quality
                 .greyscale() // set greyscale
                 .getBase64(Jimp.AUTO, function(err, src) {
                 var img = document.createElement("img");

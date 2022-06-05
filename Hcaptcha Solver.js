@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Hcaptcha Solver Mode OCR
 // @namespace     Captchus Model H
-// @version       3.1
+// @version       3.2
 // @description  Automatically solves Hcaptcha in browser
 // @author       Moryata
 // @match        https://*.hcaptcha.com/*hcaptcha-challenge*
@@ -40,7 +40,7 @@
 
     var identifiedObjectsList = [];
     var exampleImageList = [];
-    var identifyObjectsFromImagesCompleted = true;
+    var identifyObjectsFromImagesCompleted = false;
     var currentExampleUrls = [];
 
     //Default Language for hcaptcha
@@ -50,7 +50,7 @@
 
     //Guess/Match New Images
     const MATCH_IMAGES_USING_TRAINER = false;
-    const GUESS_NEW_IMAGE_TYPE = true;
+    const GUESS_NEW_IMAGE_TYPE = false;
 
     //Node Selectors
     const CHECK_BOX = "#checkbox";
@@ -119,7 +119,7 @@
 
     // Max Skips that can be done while solving the captcha
     // This is likely not to happen, if it occurs retry for new images
-    const MAX_SKIPS = 25;
+    const MAX_SKIPS = 50;
     var skipCount = 0;
 
     var USE_MOBILE_NET = true;
@@ -716,14 +716,14 @@
 
                 {
                     apply: 'darken',
-                    params: [15]
+                    params: [25]
                 }
 
             ]).contrast(1).color([
 
                 {
                     apply: 'brighten',
-                    params: [15]
+                    params: [25]
                 }
 
             ]).contrast(2).greyscale().getBase64(Jimp.AUTO, function(err, src) {
@@ -750,7 +750,7 @@
         Jimp.read(base64Image).then(function(data) {
             data.contrast(1).color([{
                 apply: 'brighten',
-                params: [15]
+                params: [25]
             }
 
                                    ])

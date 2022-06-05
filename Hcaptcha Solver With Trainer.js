@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Hcaptcha Solver Mode Trainer
 // @namespace     Captchus Model H Plus
-// @version      12.1
+// @version      12.2
 // @description  Automatically solves Hcaptcha in browser
 // @author       Moryata
 // @match        https://*.hcaptcha.com/*hcaptcha-challenge*
@@ -114,7 +114,7 @@
 
     // Max Skips that can be done while solving the captcha
     // This is likely not to happen, if it occurs retry for new images
-    const MAX_SKIPS = 25;
+    const MAX_SKIPS = 50;
     var skipCount = 0;
 
     var USE_MOBILE_NET = true;
@@ -240,7 +240,7 @@
                     .then(function(predictions) {
                     var predictionslen = predictions.length;
                     for (var j = 0; j < predictionslen; j++) {
-                        var probability = 0.035;
+                        var probability = 0.075;
                         if (probabilityForObject.get(predictions[j].className)) {
                             probability = probabilityForObject.get(predictions[j].className);
                         }
@@ -300,7 +300,7 @@
 
                         //Multiple combinations and distances are required for accuracy
                         for (let i = 0; i < data.length; i+= 4) {
-                            if( (data[i] < 150 && data[i+1] < 110 && data[i+2] > 80 && data[i+3] == 255) ||
+                            if( (data[i] < 140 && data[i+1] < 110 && data[i+2] > 80 && data[i+3] == 255) ||
                                (data[i] < 200 && data[i+1] < 200 && data[i+2] > 140 && data[i+3] == 255)){
                                 count++;
                             }
@@ -621,7 +621,7 @@
             }else{
 
             }
-        }, 500);
+        }, 1500);
     }
 
     function waitForImagesToAppear() {

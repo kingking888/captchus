@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Hcaptcha Solver Mode Trainer
 // @namespace     Captchus Model H Plus
-// @version      12.6
+// @version      12.7
 // @description  Automatically solves Hcaptcha in browser
 // @author       Moryata
 // @match        https://*.hcaptcha.com/*hcaptcha-challenge*
@@ -181,7 +181,7 @@
                 "Content-Type": "application/x-www-form-urlencoded"
             },
             data: "image=" + encodeURIComponent(imageUrl),
-            timeout: 9999,
+            timeout: 15000,
             onload: function(response) {
                 clickImages(response, imageUrl, word, i)
             },
@@ -300,7 +300,7 @@
 
                         //Multiple combinations and distances are required for accuracy
                         for (let i = 0; i < data.length; i+= 4) {
-                            if( (data[i] < 140 && data[i+1] < 110 && data[i+2] > 80 && data[i+3] == 255) ||
+                            if( (data[i] < 140 && data[i+1] < 110 && data[i+2] > 95 && data[i+3] == 255) ||
                                (data[i] < 200 && data[i+1] < 200 && data[i+2] > 140 && data[i+3] == 255)){
                                 count++;
                             }
@@ -367,7 +367,7 @@
                         clearInterval(trainerInterval);
                         return;
                     }
-                },1000);
+                },500);
             });
         });
     }
@@ -517,7 +517,7 @@
                 return;
             }
 
-        }, 50);
+        }, 25);
     } else {
 
         try {
@@ -621,7 +621,7 @@
             }else{
 
             }
-        }, 1000);
+        }, 500);
     }
 
     function waitForImagesToAppear() {
@@ -734,9 +734,9 @@
     function preProcessImageMethod3(base64Image, imageUrl) {
         //Multi Contrast only brighten
         Jimp.read(base64Image).then(function(data) {
-            data.contrast(2).color([{
+            data.contrast(1).color([{
                 apply: 'brighten',
-                params: [15]
+                params: [25]
             }
 
                                    ])
@@ -1119,7 +1119,7 @@
             for (let i = 0; i < qSelectorAll(LANGUAGE_SELECTOR).length; i++) {
                 if (qSelectorAll(LANGUAGE_SELECTOR)[i].innerText == DEFAULT_LANGUAGE) {
                     document.querySelectorAll(LANGUAGE_SELECTOR)[i].click();
-                    await delay(250);
+                    await delay(25);
                 }
             }
         }

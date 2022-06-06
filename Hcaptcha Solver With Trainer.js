@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Hcaptcha Solver Mode Trainer
 // @namespace     Captchus Model H Plus
-// @version      12.9
+// @version      13.0
 // @description  Automatically solves Hcaptcha in browser
 // @author       Moryata
 // @match        https://*.hcaptcha.com/*hcaptcha-challenge*
@@ -34,7 +34,7 @@
 
     var identifiedObjectsList = [];
     var exampleImageList = [];
-    var identifyObjectsFromImagesCompleted = true;
+    var identifyObjectsFromImagesCompleted = false;
     var currentExampleUrls = [];
 
     //Default Language for hcaptcha
@@ -109,14 +109,14 @@
 
     // Option to override the default image matching
     // Enabling this by default
-    const ENABLE_TENSORFLOW = false;
+    const ENABLE_TENSORFLOW = true;
 
     // Max Skips that can be done while solving the captcha
     // This is likely not to happen, if it occurs retry for new images
     const MAX_SKIPS = 50;
     var skipCount = 0;
 
-    var USE_MOBILE_NET = true;
+    var USE_MOBILE_NET = false;
     var USE_COLOUR_PATTERN = false;
     var NEW_WORD_IDENTIFIED = false;
 
@@ -942,6 +942,7 @@
                             if (i == imageUrlList.length - 1) {
                                 identifyObjectsFromImagesCompleted = true;
                             }
+
                         })
                 }
             } catch (e) {
@@ -984,6 +985,7 @@
                 // Set a timeout if you want to see the text
                 qSelector(SUBMIT_BUTTON).click();
             }
+
         } catch (err) {
             console.log(err.message);
         }
@@ -1100,6 +1102,7 @@
                 //Identify Images from Example
                 word = await identifyWordFromExamples();
             }
+
         } catch (e) {
             console.log(e);
         }
@@ -1145,6 +1148,8 @@
                     word = await getSynonyms(word);
                     //console.log("words are::" + word);
                 }
+
+
             } catch (err) {
                 console.log(err.message);
                 return selectImagesAfterDelay(5);
@@ -1191,6 +1196,7 @@
                 }
             }
             waitUntilImageSelection();
+
         } else {
             waitForImagesToAppear();
         }

@@ -1,27 +1,13 @@
 // ==UserScript==
 // @name         Recaptcha Solver
 // @namespace    Recaptcha Solver
-// @version      2.3
+// @version      2.4
 // @description  Recaptcha Solver in Browser | Automatically solves Recaptcha in browser
 // @author       moryata
 // @match        *://*/recaptcha/*
 // @connect      engageub.pythonanywhere.com
 // @connect      engageub1.pythonanywhere.com
 // @grant        GM_xmlhttpRequest
-/*
-
-¦¦¦¦¦¦+ ¦¦¦¦¦¦¦+ ¦¦¦¦¦¦+ ¦¦¦¦¦+ ¦¦¦¦¦¦+ ¦¦¦¦¦¦¦¦+ ¦¦¦¦¦¦+¦¦+  ¦¦+ ¦¦¦¦¦+     ¦¦¦¦¦¦¦+ ¦¦¦¦¦¦+ ¦¦+    ¦¦+   ¦¦+¦¦¦¦¦¦¦+¦¦¦¦¦¦+
-¦¦+--¦¦+¦¦+----+¦¦+----+¦¦+--¦¦+¦¦+--¦¦++--¦¦+--+¦¦+----+¦¦¦  ¦¦¦¦¦+--¦¦+    ¦¦+----+¦¦+---¦¦+¦¦¦    ¦¦¦   ¦¦¦¦¦+----+¦¦+--¦¦+
-¦¦¦¦¦¦++¦¦¦¦¦+  ¦¦¦     ¦¦¦¦¦¦¦¦¦¦¦¦¦¦++   ¦¦¦   ¦¦¦     ¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦    ¦¦¦¦¦¦¦+¦¦¦   ¦¦¦¦¦¦    ¦¦¦   ¦¦¦¦¦¦¦¦+  ¦¦¦¦¦¦++
-¦¦+--¦¦+¦¦+--+  ¦¦¦     ¦¦+--¦¦¦¦¦+---+    ¦¦¦   ¦¦¦     ¦¦+--¦¦¦¦¦+--¦¦¦    +----¦¦¦¦¦¦   ¦¦¦¦¦¦    +¦¦+ ¦¦++¦¦+--+  ¦¦+--¦¦+
-¦¦¦  ¦¦¦¦¦¦¦¦¦¦++¦¦¦¦¦¦+¦¦¦  ¦¦¦¦¦¦        ¦¦¦   +¦¦¦¦¦¦+¦¦¦  ¦¦¦¦¦¦  ¦¦¦    ¦¦¦¦¦¦¦¦+¦¦¦¦¦¦++¦¦¦¦¦¦¦++¦¦¦¦++ ¦¦¦¦¦¦¦+¦¦¦  ¦¦¦
-+-+  +-++------+ +-----++-+  +-++-+        +-+    +-----++-+  +-++-+  +-+    +------+ +-----+ +------+ +---+  +------++-+  +-+
-/*
-
-
-/** Note: This script is solely intended for the use of educational purposes only and not to abuse any website.
-This script uses audio in order to solve the captcha. Use it wisely and do not abuse any website.
-*/
 // ==/UserScript==
 (function() {
     'use strict';
@@ -46,11 +32,11 @@ This script uses audio in order to solve the captcha. Use it wisely and do not a
     var recaptchaLanguage = qSelector("html").getAttribute("lang");
     var audioUrl = "";
     var recaptchaInitialStatus = qSelector(RECAPTCHA_STATUS) ? qSelector(RECAPTCHA_STATUS).innerText : ""
-    var serversList = ["https://engageub.pythonanywhere.com","https://engageub1.pythonanywhere.com"];
+    var serversList = ["https://engageub.pythonanywhere.com", "https://engageub1.pythonanywhere.com"];
     var latencyList = Array(serversList.length).fill(250);
     //Check for visibility && Click the check box
     function isHidden(el) {
-        return(el.offsetParent === null)
+        return (el.offsetParent === null)
     }
 
     async function getTextFromAudio(URL) {
@@ -58,8 +44,8 @@ This script uses audio in order to solve the captcha. Use it wisely and do not a
         var url = "";
 
         //Selecting the last/latest server by default if latencies are equal
-        for(let k=0; k< latencyList.length;k++){
-            if(latencyList[k] <= minLatency){
+        for (let k = 0; k < latencyList.length; k++) {
+            if (latencyList[k] <= minLatency) {
                 minLatency = latencyList[k];
                 url = serversList[k];
             }
@@ -67,7 +53,7 @@ This script uses audio in order to solve the captcha. Use it wisely and do not a
 
         requestCount = requestCount + 1;
         URL = URL.replace("recaptcha.net", "google.com");
-        if(recaptchaLanguage.length < 1) {
+        if (recaptchaLanguage.length < 1) {
             console.log("Recaptcha Language is not recognized");
             recaptchaLanguage = "en-US";
         }
@@ -84,14 +70,14 @@ This script uses audio in order to solve the captcha. Use it wisely and do not a
             onload: function(response) {
                 console.log("Response::" + response.responseText);
                 try {
-                    if(response && response.responseText) {
+                    if (response && response.responseText) {
                         var responseText = response.responseText;
                         //Validate Response for error messages or html elements
-                        if(responseText == "0" || responseText.includes("<") || responseText.includes(">") || responseText.length < 2 || responseText.length > 50) {
+                        if (responseText == "0" || responseText.includes("<") || responseText.includes(">") || responseText.length < 2 || responseText.length > 50) {
                             //Invalid Response, Reload the captcha
                             console.log("Invalid Response. Retrying..");
-                        } else if(qSelector(AUDIO_SOURCE) && qSelector(AUDIO_SOURCE).src && audioUrl == qSelector(AUDIO_SOURCE).src && qSelector(AUDIO_RESPONSE)
-                                  && !qSelector(AUDIO_RESPONSE).value && qSelector(AUDIO_BUTTON).style.display == "none" && qSelector(VERIFY_BUTTON)) {
+                        } else if (qSelector(AUDIO_SOURCE) && qSelector(AUDIO_SOURCE).src && audioUrl == qSelector(AUDIO_SOURCE).src && qSelector(AUDIO_RESPONSE) &&
+                            !qSelector(AUDIO_RESPONSE).value && qSelector(AUDIO_BUTTON).style.display == "none" && qSelector(VERIFY_BUTTON)) {
                             qSelector(AUDIO_RESPONSE).value = responseText;
                             qSelector(VERIFY_BUTTON).click();
                         } else {
@@ -99,8 +85,7 @@ This script uses audio in order to solve the captcha. Use it wisely and do not a
                         }
                         waitingForAudioResponse = false;
                     }
-
-                } catch(err) {
+                } catch (err) {
                     console.log(err.message);
                     console.log("Exception handling response. Retrying..");
                     waitingForAudioResponse = false;
@@ -117,7 +102,6 @@ This script uses audio in order to solve the captcha. Use it wisely and do not a
         });
     }
 
-
     async function pingTest(url) {
         var start = new Date().getTime();
         GM_xmlhttpRequest({
@@ -130,12 +114,12 @@ This script uses audio in order to solve the captcha. Use it wisely and do not a
             timeout: 10000,
             onload: function(response) {
 
-                if(response && response.responseText && response.responseText=="0") {
+                if (response && response.responseText && response.responseText == "0") {
                     var end = new Date().getTime();
                     var milliseconds = end - start;
 
                     // For large values use Hashmap
-                    for(let i=0; i< serversList.length;i++){
+                    for (let i = 0; i < serversList.length; i++) {
                         if (url == serversList[i]) {
                             latencyList[i] = milliseconds;
                         }
@@ -151,7 +135,6 @@ This script uses audio in order to solve the captcha. Use it wisely and do not a
         });
     }
 
-
     function qSelectorAll(selector) {
         return document.querySelectorAll(selector);
     }
@@ -160,12 +143,10 @@ This script uses audio in order to solve the captcha. Use it wisely and do not a
         return document.querySelector(selector);
     }
 
-
-
-    if(qSelector(CHECK_BOX)){
+    if (qSelector(CHECK_BOX)) {
         qSelector(CHECK_BOX).click();
-    } else if(window.location.href.includes("bframe")){
-        for(let i=0; i< serversList.length;i++){
+    } else if (window.location.href.includes("bframe")) {
+        for (let i = 0; i < serversList.length; i++) {
             pingTest(serversList[i]);
         }
     }
@@ -173,50 +154,50 @@ This script uses audio in order to solve the captcha. Use it wisely and do not a
     //Solve the captcha using audio
     var startInterval = setInterval(function() {
         try {
-            if(!checkBoxClicked && qSelector(CHECK_BOX) && !isHidden(qSelector(CHECK_BOX))) {
+            if (!checkBoxClicked && qSelector(CHECK_BOX) && !isHidden(qSelector(CHECK_BOX))) {
                 //console.log("checkbox clicked");
                 qSelector(CHECK_BOX).click();
                 checkBoxClicked = true;
             }
             //Check if the captcha is solved
-            if(qSelector(RECAPTCHA_STATUS) && (qSelector(RECAPTCHA_STATUS).innerText != recaptchaInitialStatus)) {
+            if (qSelector(RECAPTCHA_STATUS) && (qSelector(RECAPTCHA_STATUS).innerText != recaptchaInitialStatus)) {
                 solved = true;
                 console.log("SOLVED");
                 clearInterval(startInterval);
             }
-            if(requestCount > MAX_ATTEMPTS) {
+            if (requestCount > MAX_ATTEMPTS) {
                 console.log("Attempted Max Retries. Stopping the solver");
                 solved = true;
                 clearInterval(startInterval);
             }
-            if(!solved) {
-                if(qSelector(AUDIO_BUTTON) && !isHidden(qSelector(AUDIO_BUTTON)) && qSelector(IMAGE_SELECT)) {
+            if (!solved) {
+                if (qSelector(AUDIO_BUTTON) && !isHidden(qSelector(AUDIO_BUTTON)) && qSelector(IMAGE_SELECT)) {
                     // console.log("Audio button clicked");
                     qSelector(AUDIO_BUTTON).click();
                 }
-                if((!waitingForAudioResponse && qSelector(AUDIO_SOURCE) && qSelector(AUDIO_SOURCE).src
-                    && qSelector(AUDIO_SOURCE).src.length > 0 && audioUrl == qSelector(AUDIO_SOURCE).src
-                    && qSelector(RELOAD_BUTTON)) ||
-                   (qSelector(AUDIO_ERROR_MESSAGE) && qSelector(AUDIO_ERROR_MESSAGE).innerText.length > 0 && qSelector(RELOAD_BUTTON) &&
-                    !qSelector(RELOAD_BUTTON).disabled)){
+                if ((!waitingForAudioResponse && qSelector(AUDIO_SOURCE) && qSelector(AUDIO_SOURCE).src &&
+                        qSelector(AUDIO_SOURCE).src.length > 0 && audioUrl == qSelector(AUDIO_SOURCE).src &&
+                        qSelector(RELOAD_BUTTON)) ||
+                    (qSelector(AUDIO_ERROR_MESSAGE) && qSelector(AUDIO_ERROR_MESSAGE).innerText.length > 0 && qSelector(RELOAD_BUTTON) &&
+                        !qSelector(RELOAD_BUTTON).disabled)) {
                     qSelector(RELOAD_BUTTON).click();
-                } else if(!waitingForAudioResponse && qSelector(RESPONSE_FIELD) && !isHidden(qSelector(RESPONSE_FIELD))
-                          && !qSelector(AUDIO_RESPONSE).value && qSelector(AUDIO_SOURCE) && qSelector(AUDIO_SOURCE).src
-                          && qSelector(AUDIO_SOURCE).src.length > 0 && audioUrl != qSelector(AUDIO_SOURCE).src
-                          && requestCount <= MAX_ATTEMPTS) {
+                } else if (!waitingForAudioResponse && qSelector(RESPONSE_FIELD) && !isHidden(qSelector(RESPONSE_FIELD)) &&
+                    !qSelector(AUDIO_RESPONSE).value && qSelector(AUDIO_SOURCE) && qSelector(AUDIO_SOURCE).src &&
+                    qSelector(AUDIO_SOURCE).src.length > 0 && audioUrl != qSelector(AUDIO_SOURCE).src &&
+                    requestCount <= MAX_ATTEMPTS) {
                     waitingForAudioResponse = true;
                     audioUrl = qSelector(AUDIO_SOURCE).src
                     getTextFromAudio(audioUrl);
-                }else {
+                } else {
                     //Waiting
                 }
             }
             //Stop solving when Automated queries message is shown
-            if(qSelector(DOSCAPTCHA) && qSelector(DOSCAPTCHA).innerText.length > 0) {
+            if (qSelector(DOSCAPTCHA) && qSelector(DOSCAPTCHA).innerText.length > 0) {
                 console.log("Automated Queries Detected");
                 clearInterval(startInterval);
             }
-        } catch(err) {
+        } catch (err) {
             console.log(err.message);
             console.log("An error occurred while solving. Stopping the solver.");
             clearInterval(startInterval);

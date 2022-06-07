@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Hcaptcha Solver Mode Trainer
 // @namespace     Captchus Model H Plus
-// @version      13.3
+// @version      13.4
 // @description  Automatically solves Hcaptcha in browser
 // @author       Moryata
 // @match        https://*.hcaptcha.com/*hcaptcha-challenge*
@@ -17,7 +17,7 @@
 // @connect      https://unpkg.com
 // @connect      https://*.hcaptcha.com/*
 // @require      https://unpkg.com/jimp@0.12.0/browser/lib/jimp.min.js
-// @require      https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/2.0.0-alpha.2/tesseract.min.js
+// @require      https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/2.1.5/tesseract.min.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/tensorflow/3.18.0/tf.min.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/2.1.5/worker.min.js
 // @require      https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd@2.2.2/dist/coco-ssd.min.js

@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Helidrops Free coins Auto Claim
 // @namespace    Auto Claim Helidrop
-// @version      1.2
+// @version      1.3
 // @description  Auto Claim from manual faucet
 // @author       Moryata
 // @match        https://helidrops.io/*
@@ -23,6 +23,6 @@
     // refresh page after 60 secondes
     setTimeout(function() {
         window.location.assign(site);
-    }, 25000);
+    }, 60000);
 
 })();

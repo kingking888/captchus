@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Hcaptcha Solver Mode Trainer
 // @namespace     Captchus Model H Plus
-// @version      13.0
+// @version      13.1
 // @description  Automatically solves Hcaptcha in browser
 // @author       Moryata
 // @match        https://*.hcaptcha.com/*hcaptcha-challenge*
@@ -34,7 +34,7 @@
 
     var identifiedObjectsList = [];
     var exampleImageList = [];
-    var identifyObjectsFromImagesCompleted = false;
+    var identifyObjectsFromImagesCompleted = true;
     var currentExampleUrls = [];
 
     //Default Language for hcaptcha
@@ -109,7 +109,7 @@
 
     // Option to override the default image matching
     // Enabling this by default
-    const ENABLE_TENSORFLOW = true;
+    const ENABLE_TENSORFLOW = false;
 
     // Max Skips that can be done while solving the captcha
     // This is likely not to happen, if it occurs retry for new images
@@ -239,7 +239,7 @@
                     .then(function(predictions) {
                         var predictionslen = predictions.length;
                         for (var j = 0; j < predictionslen; j++) {
-                            var probability = 0.055;
+                            var probability = 0.025;
                             if (probabilityForObject.get(predictions[j].className)) {
                                 probability = probabilityForObject.get(predictions[j].className);
                             }
@@ -449,7 +449,7 @@
 
     async function getSynonyms(word) {
 
-        USE_MOBILE_NET = false;
+        USE_MOBILE_NET = true;
         USE_COLOUR_PATTERN = false;
         NEW_WORD_IDENTIFIED = false;
 

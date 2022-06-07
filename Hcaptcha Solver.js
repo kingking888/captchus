@@ -1,20 +1,15 @@
 // ==UserScript==
 // @name         Hcaptcha Solver Mode OCR
 // @namespace    Captchus Model H
-// @version       4.6
+// @version       4.7
 // @description  Automatically solves Hcaptcha in browser
 // @author       Moryata
 // @match        https://*.hcaptcha.com/*hcaptcha-challenge*
-// @match        https://*.hcaptcha.com/*hcaptcha*
 // @match        https://*.hcaptcha.com/*checkbox*
-// @match        https://*.hcaptcha.com/*hcaptcha.html*
-// @grant        GM_getResourceText
+// @match        https://*.hcaptcha.com/*captcha*
 // @grant        GM_xmlhttpRequest
 // @grant        GM_setValue
 // @grant        GM_getValue
-// @grant        GM_deleteValue
-// @grant        GM_listValues
-// @grant        GM_addValueChangeListener
 // @run-at       document-start
 // @connect      www.imageidentify.com
 // @connect      https://cdnjs.cloudflare.com

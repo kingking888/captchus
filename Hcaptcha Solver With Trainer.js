@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Hcaptcha Solver Mode Trainer
 // @namespace     Captchus Model H Plus
-// @version      13.2
+// @version      13.3
 // @description  Automatically solves Hcaptcha in browser
 // @author       Moryata
 // @match        https://*.hcaptcha.com/*hcaptcha-challenge*
@@ -16,9 +16,10 @@
 // @connect      https://cdn.jsdelivr.net
 // @connect      https://unpkg.com
 // @connect      https://*.hcaptcha.com/*
-// @require      https://unpkg.com/jimp@0.5.2/browser/lib/jimp.min.js
+// @require      https://unpkg.com/jimp@0.12.0/browser/lib/jimp.min.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/2.0.0-alpha.2/tesseract.min.js
-// @require      https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.13.0/dist/tf.min.js
+// @require      https://cdnjs.cloudflare.com/ajax/libs/tensorflow/3.18.0/tf.min.js
+// @require      https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/2.1.5/worker.min.js
 // @require      https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd@2.2.2/dist/coco-ssd.min.js
 // @require      https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@2.1.0/dist/mobilenet.min.js
 
@@ -109,7 +110,7 @@
 
     // Option to override the default image matching
     // Enabling this by default
-    const ENABLE_TENSORFLOW = false;
+    const ENABLE_TENSORFLOW = true;
 
     // Max Skips that can be done while solving the captcha
     // This is likely not to happen, if it occurs retry for new images

@@ -23,6 +23,6 @@
     // refresh page after 60 secondes
     setTimeout(function() {
         window.location.assign(site);
-    }, 60000);
+    }, 180000);
 
 })();

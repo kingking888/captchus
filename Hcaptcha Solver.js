@@ -1,12 +1,15 @@
 // ==UserScript==
 // @name         Hcaptcha Solver Mode OCR
 // @namespace    Captchus Model H
-// @version       4.7
+// @version       4.9
 // @description  Automatically solves Hcaptcha in browser
 // @author       Moryata
 // @match        https://*.hcaptcha.com/*hcaptcha-challenge*
 // @match        https://*.hcaptcha.com/*checkbox*
 // @match        https://*.hcaptcha.com/*captcha*
+// @match        https://newassets.hcaptcha.com/*
+// @match        https://*.hcaptcha.com/*hcaptcha*
+// @match        https://*.hcaptcha.com/*hcaptcha.html*
 // @grant        GM_xmlhttpRequest
 // @grant        GM_setValue
 // @grant        GM_getValue
@@ -24,7 +27,6 @@
 // @require      https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@2.1.0/dist/mobilenet.min.js
 // ==/UserScript==
 (async function() {
-
     //TODO: Enable debug mode to print console logs
     //TODO: Refactor Code for different models
     'use strict';
@@ -35,7 +37,7 @@
 
     var identifiedObjectsList = [];
     var exampleImageList = [];
-    var identifyObjectsFromImagesCompleted = false;
+    var identifyObjectsFromImagesCompleted = true;
     var currentExampleUrls = [];
 
     //Default Language for hcaptcha
@@ -98,8 +100,6 @@
     // Vertical River
     const VALLEY = "valley";
     const VERTICAL_RIVER = "vertical river";
-
-
     const LIVING_ROOM_TYPES = [BED, BOOK, CHAIR, CLOCK, COUCH, DINING_TABLE, POTTED_PLANT, TV];
     const TRANSPORT_TYPES = [AIRPLANE, BICYCLE, BOAT, BUS, CAR, MOTORBUS, MOTORCYCLE, SEAPLANE, SPEEDBOAT, SURFBOARD, TRAIN, TRIMARAN, TRUCK];
     const ANIMAL_TYPES = [ZEBRA, CAT, DOG];
@@ -110,7 +110,7 @@
 
     // Option to override the default image matching
     // Enabling this by default
-    const ENABLE_TENSORFLOW = false;
+    let ENABLE_TENSORFLOW = true;
 
     // Max Skips that can be done while solving the captcha
     // This is likely not to happen, if it occurs retry for new images
@@ -123,15 +123,14 @@
 
     //Probablility for objects
     var probabilityForObject = new Map();
-    probabilityForObject.set("speedboat", 0.14);
-    probabilityForObject.set("fireboat", 0.4);
-    probabilityForObject.set("boathouse", 0.4);
+    probabilityForObject.set("speedboat", 0.15);
+    probabilityForObject.set("fireboat", 0.5);
+    probabilityForObject.set("boathouse", 0.5);
     probabilityForObject.set("submarine", 0.5);
     probabilityForObject.set("printer", 0.05);
     probabilityForObject.set("stretcher", 0.05);
     probabilityForObject.set("rotisserie", 0.02);
     probabilityForObject.set("spatula", 0.05);
-
 
     String.prototype.includesOneOf = function(arrayOfStrings) {
 
@@ -241,14 +240,12 @@
         }
         return false;
     }
-	
     // This script uses imageidentify API (wolfram) . You may also use TensorFlow.js, Yolo latest version to recognize common objects.
     //(When the cloud service is available for yolo, we can switch the API endpoint). Accuracy varies between Wolfram, Tensorflow and Yolo.
     // Use this as a reference to solve recaptcha/other captchas using scripts in browser. This is intended for learning purposes.
     // Using TensorFlow as fallback, but this requires good CPU in order to solve quickly.
     // CPU utilization and memory utlization may go high when using TensorFlow.js
     function matchImages(imageUrl, word, i) {
-
         GM_xmlhttpRequest({
             method: "POST",
             url: "https://www.imageidentify.com/objects/user-26a7681f-4b48-4f71-8f9f-93030898d70d/prd/urlapi/",
@@ -256,7 +253,7 @@
                 "Content-Type": "application/x-www-form-urlencoded"
             },
             data: "image=" + encodeURIComponent(imageUrl),
-            timeout: 8000,
+            timeout: 10000,
             onload: function(response) {
                 clickImages(response, imageUrl, word, i)
             },
@@ -267,14 +264,12 @@
                     console.log("Using Fallback");
                 }
                 matchImagesUsingTensorFlow(imageUrl, word, i);
-
             },
             ontimeout: function() {
                 //console.log("Timed out. Using Fallback");
                 matchImagesUsingTensorFlow(imageUrl, word, i);
             },
         });
-
     }
 
     function matchImagesUsingTensorFlow(imageUrl, word, i) {
@@ -303,7 +298,6 @@
         }
     }
 
-
     function matchImagesUsingTensorFlowMobileNet(imageUrl, word, i) {
 
         try {
@@ -315,7 +309,7 @@
                     .then(function(predictions) {
                         var predictionslen = predictions.length;
                         for (var j = 0; j < predictionslen; j++) {
-                            var probability = 0.050;
+                            var probability = 0.060;
                             if (probabilityForObject.get(predictions[j].className)) {
                                 probability = probabilityForObject.get(predictions[j].className);
                             }
@@ -335,8 +329,6 @@
             console.log(err.message);
         }
     }
-
-
     // TODO: Generalize this logic
     // Identifying this based on the observation of the images seen
     // The actual way would be to scan the entire image to find the lake.
@@ -376,8 +368,8 @@
 
                             //Multiple combinations and distances are required for accuracy
                             for (let i = 0; i < data.length; i += 4) {
-                                if ((data[i] < 140 && data[i + 1] < 110 && data[i + 2] > 80 && data[i + 3] == 255) ||
-                                    (data[i] < 200 && data[i + 1] < 200 && data[i + 2] > 140 && data[i + 3] == 255)) {
+                                if ((data[i] < 150 && data[i + 1] < 120 && data[i + 2] > 100 && data[i + 3] == 255) ||
+                                    (data[i] < 200 && data[i + 1] < 200 && data[i + 2] > 150 && data[i + 3] == 255)) {
                                     count++;
                                 }
                             }
@@ -398,7 +390,6 @@
             });
         });
     }
-
 
     // This approach is naive approch to store the images and retrieve
     // The accuracy is 100% as long as you store the selected images
@@ -445,16 +436,11 @@
                         console.log("Image Stored into database");
                         clearInterval(trainerInterval);
                         return;
-
                     }
-
-                }, 5000);
-
+                }, 1000);
             });
         });
     }
-
-
     //Function to sleep or delay
     async function delay(ms) {
         return new Promise(resolve => setTimeout(resolve, ms))
@@ -534,13 +520,10 @@
         return document.querySelector(selector);
     }
 
-
     async function getSynonyms(word) {
-
         USE_MOBILE_NET = false;
         USE_COLOUR_PATTERN = false;
         NEW_WORD_IDENTIFIED = false;
-
         //TODO: Format this to JSON string
         if (word == MOTORBUS || word == BUS) {
             word = ['bus', 'motorbus'];
@@ -587,13 +570,11 @@
         }
 
         return word
-
     }
 
     function isHidden(el) {
         return (el.offsetParent === null)
     }
-
     if (window.location.href.includes("checkbox")) {
         var checkboxInterval = setInterval(function() {
             if (!qSelector(CHECK_BOX)) {
@@ -606,7 +587,7 @@
                 return;
             }
 
-        }, 5);
+        }, 250);
     } else {
 
         try {
@@ -619,7 +600,6 @@
             console.log(err);
             console.log("Tesseract could not be initialized");
         }
-
     }
 
     function selectImagesAfterDelay(delay) {
@@ -671,7 +651,6 @@
         return imageUrl;
     }
 
-
     function getImageList() {
         var imageList = [];
         if (qSelectorAll(IMAGE).length > 0) {
@@ -712,11 +691,9 @@
                 if (qSelector(SUBMIT_BUTTON)) {
                     qSelector(SUBMIT_BUTTON).click();
                 }
-                return selectImagesAfterDelay(5);
-            } else {
-
-            }
-        }, 3000);
+                return selectImagesAfterDelay(1);
+            } else {}
+        }, 1000);
     }
 
     function waitForImagesToAppear() {
@@ -745,29 +722,20 @@
                     }
                 }
             }
-        }, 5000);
+        }, 3000);
     }
 
     //TODO: Convert Image to base64 to avoid multiple calls
     function preProcessImage(base64Image, imageUrl) {
-
         //Darken and Brighten
         Jimp.read(base64Image).then(function(data) {
-            data.color([
-
-                    {
-                        apply: 'darken',
-                        params: [20]
-                    }
-
-                ]).color([
-
-                    {
-                        apply: 'brighten',
-                        params: [20]
-                    }
-
-                ])
+            data.color([{
+                    apply: 'darken',
+                    params: [20]
+                }]).color([{
+                    apply: 'brighten',
+                    params: [20]
+                }])
                 .greyscale()
                 .getBase64(Jimp.AUTO, function(err, src) {
                     var img = document.createElement("img");
@@ -787,29 +755,19 @@
 
                 });
         });
-
     }
-
 
     function preProcessImageMethod2(base64Image, trimageUrl) {
 
         //Multi Contrast darken and brighten
         Jimp.read(base64Image).then(function(data) {
-            data.color([
-
-                {
-                    apply: 'darken',
-                    params: [20]
-                }
-
-            ]).contrast(1).color([
-
-                {
-                    apply: 'brighten',
-                    params: [20]
-                }
-
-            ]).contrast(1).greyscale().getBase64(Jimp.AUTO, function(err, src) {
+            data.color([{
+                apply: 'darken',
+                params: [20]
+            }]).contrast(1).color([{
+                apply: 'brighten',
+                params: [20]
+            }]).contrast(1).greyscale().getBase64(Jimp.AUTO, function(err, src) {
                 var img = document.createElement("img");
                 img.setAttribute("src", src);
 
@@ -825,24 +783,20 @@
                 });
             });
         });
-
     }
 
     function preProcessImageMethod3(base64Image, imageUrl) {
         //Multi Contrast only brighten
         Jimp.read(base64Image).then(function(data) {
             data.contrast(1).color([{
-                        apply: 'brighten',
-                        params: [20]
-                    }
-
-                ])
+                    apply: 'brighten',
+                    params: [20]
+                }])
                 .contrast(1)
                 .greyscale()
                 .getBase64(Jimp.AUTO, function(err, src) {
                     var img = document.createElement("img");
                     img.setAttribute("src", src);
-
                     worker.recognize(img, LANGUAGE_FOR_OCR).then(function(data) {
                         //Remove Image After recognizing
                         img.removeAttribute("src");
@@ -861,7 +815,7 @@
         //Resize the image
         Jimp.read(base64Image).then(function(data) {
             data.resize(256, Jimp.AUTO)
-                .quality(90) // set JPEG quality
+                .quality(60) // set JPEG quality
                 .greyscale() // set greyscale
                 .getBase64(Jimp.AUTO, function(err, src) {
                     var img = document.createElement("img");
@@ -895,26 +849,19 @@
             if (imageUrl == 0) {
                 return selectImagesAfterDelay(1);
             }
-
             Jimp.read(imageUrl).then(function(data) {
-
                 data.getBase64(Jimp.AUTO, function(err, src) {
-
                     var img = document.createElement("img");
                     img.setAttribute("src", src);
                     var base64Image = img.src;
-
                     preProcessImage(base64Image, imageUrl);
-
                 })
             });
-
         } catch (err) {
             console.log(err.message);
             return selectImagesAfterDelay(1);
         }
     }
-
 
     async function convertTextToImage(text) {
 
@@ -928,7 +875,6 @@
         ctx.fillText(text, 10, 50);
         var img = document.createElement("img");
         img.src = canvas.toDataURL();
-
         return img;
     }
 
@@ -972,7 +918,6 @@
                 return true;
             }
         }
-
         return false;
     }
 
@@ -992,25 +937,19 @@
                             for (let j = 0; j < predictionslen; j++) {
                                 hashSet.add(predictions[j].class);
                             }
-
                             hashSet.forEach((key) => {
                                 identifiedObjectsList.push(key);
                             });
-
                             img.removeAttribute("src");
-
                             if (i == imageUrlList.length - 1) {
                                 identifyObjectsFromImagesCompleted = true;
                             }
-
                         })
                 }
             } catch (e) {
                 console.log(e);
             }
-
         }
-
     }
 
     async function identifyObjectsFromImagesUsingMobileNet(imageUrlList) {
@@ -1053,9 +992,7 @@
             } catch (e) {
                 console.log(e);
             }
-
         }
-
     }
 
     async function getWordFromIdentifiedObjects(identifiedObjectsList) {
@@ -1082,7 +1019,6 @@
 
         return objectKey;
     }
-
 
     function inputChallenge(data, imageUrl) {
         try {
@@ -1111,7 +1047,7 @@
             }
             identifyObjectsFromImages(exampleImageList);
             while (!identifyObjectsFromImagesCompleted) {
-                await delay(2000)
+                await delay(1000)
             }
             identifyObjectsFromImagesCompleted = false;
             word = await getWordFromIdentifiedObjects(identifiedObjectsList);
@@ -1122,7 +1058,7 @@
                 await initializeTensorFlowMobilenetModel();
                 identifyObjectsFromImagesUsingMobileNet(exampleImageList);
                 while (!identifyObjectsFromImagesCompleted) {
-                    await delay(2000)
+                    await delay(1000)
                 }
                 identifyObjectsFromImagesCompleted = false;
 
@@ -1151,10 +1087,7 @@
         }
 
         return true;
-
     }
-
-
     async function identifyWord() {
         var word = -1;
         try {
@@ -1202,7 +1135,6 @@
 
         return word;
     }
-
     var prevWord = "";
 
     async function selectImages() {
@@ -1211,7 +1143,7 @@
             for (let i = 0; i < qSelectorAll(LANGUAGE_SELECTOR).length; i++) {
                 if (qSelectorAll(LANGUAGE_SELECTOR)[i].innerText == DEFAULT_LANGUAGE) {
                     document.querySelectorAll(LANGUAGE_SELECTOR)[i].click();
-                    await delay(10);
+                    await delay(50);
                 }
             }
         }
@@ -1240,8 +1172,6 @@
                     word = await getSynonyms(word);
                     //console.log("words are::" + word);
                 }
-
-
             } catch (err) {
                 console.log(err.message);
                 return selectImagesAfterDelay(5);

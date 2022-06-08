@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Hcaptcha Solver Mode Trainer
 // @namespace     Captchus Model H Plus
-// @version      13.7
+// @version      13.8
 // @description  Automatically solves Hcaptcha in browser
 // @author       Moryata
 // @match        https://*.hcaptcha.com/*hcaptcha-challenge*
@@ -108,7 +108,7 @@
 
     // Option to override the default image matching
     // Enabling this by default
-    let ENABLE_TENSORFLOW = true;
+    var ENABLE_TENSORFLOW = true;
 
     // Max Skips that can be done while solving the captcha
     // This is likely not to happen, if it occurs retry for new images

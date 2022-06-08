@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Allfaucet
 // @namespace    AutoClaim
-// @version      1.7
+// @version      1.8
 // @description  Auto Claim from manual faucet
 // @author       Moryata
 // @match        https://allfaucet.xyz/*
@@ -15,7 +15,7 @@
         if (unsafeWindow.hcaptcha && unsafeWindow.hcaptcha.getResponse() && unsafeWindow.hcaptcha.getResponse().length) {
             document.querySelector(".claim-button").click();
         }
-    }, 2525);
+    }, 1000);
 
     var site = "https://allfaucet.xyz/faucet";
 

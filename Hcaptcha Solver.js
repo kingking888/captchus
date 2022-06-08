@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Hcaptcha Solver Mode OCR
 // @namespace    Captchus Model H
-// @version       5.1
+// @version       5.2
 // @description  Automatically solves Hcaptcha in browser
 // @author       Moryata
 // @match        https://*.hcaptcha.com/*hcaptcha-challenge*
@@ -9,7 +9,6 @@
 // @match        https://*.hcaptcha.com/*captcha*
 // @match        https://newassets.hcaptcha.com/*
 // @match        https://*.hcaptcha.com/*hcaptcha*
-// @match        https://*.hcaptcha.com/*hcaptcha.html*
 // @grant        GM_xmlhttpRequest
 // @grant        GM_setValue
 // @grant        GM_getValue

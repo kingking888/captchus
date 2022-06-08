@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Hcaptcha Solver Mode OCR
 // @namespace    Captchus Model H
-// @version       4.9
+// @version       5.0
 // @description  Automatically solves Hcaptcha in browser
 // @author       Moryata
 // @match        https://*.hcaptcha.com/*hcaptcha-challenge*
@@ -37,7 +37,7 @@
 
     var identifiedObjectsList = [];
     var exampleImageList = [];
-    var identifyObjectsFromImagesCompleted = true;
+    var identifyObjectsFromImagesCompleted = false;
     var currentExampleUrls = [];
 
     //Default Language for hcaptcha
@@ -313,7 +313,6 @@
                             if (probabilityForObject.get(predictions[j].className)) {
                                 probability = probabilityForObject.get(predictions[j].className);
                             }
-
                             if (qSelectorAll(IMAGE)[i] && (qSelectorAll(IMAGE)[i].style.background).includes(imageUrl) &&
                                 qSelectorAll(TASK_IMAGE_BORDER)[i].style.opacity == 0 &&
                                 predictions[j].className.includesOneOf(word) && predictions[j].probability > probability) {
@@ -368,22 +367,19 @@
 
                             //Multiple combinations and distances are required for accuracy
                             for (let i = 0; i < data.length; i += 4) {
-                                if ((data[i] < 150 && data[i + 1] < 120 && data[i + 2] > 100 && data[i + 3] == 255) ||
-                                    (data[i] < 200 && data[i + 1] < 200 && data[i + 2] > 150 && data[i + 3] == 255)) {
+                                if ((data[i] < 140 && data[i + 1] < 110 && data[i + 2] > 90 && data[i + 3] == 255) ||
+                                    (data[i] < 200 && data[i + 1] < 200 && data[i + 2] > 140 && data[i + 3] == 255)) {
                                     count++;
                                 }
                             }
-
                             if (count > 0.001 * (data.length / 4) && count < data.length / 8) {
                                 if (qSelectorAll(IMAGE)[i] && (qSelectorAll(IMAGE)[i].style.background).includes(imageUrl) &&
                                     qSelectorAll(TASK_IMAGE_BORDER)[i].style.opacity == 0) {
                                     qSelectorAll(TASK_IMAGE)[i].click();
                                 }
                             }
-
                             img.removeAttribute("src");
                             selectedImageCount = selectedImageCount + 1;
-
                         });
                 });
                 img.removeAttribute("src");
@@ -398,12 +394,9 @@
     // This approach is only used during urgent scenarios before training the images
     // Image differnce can also be done with the stored images to identify new image based on the existing if they are nearly equal
     function matchImagesUsingTrainer(imageUrl, word, i) {
-
         Jimp.read(imageUrl).then(function(data) {
-
             data.getBase64(Jimp.AUTO, async function(err, src) {
                 var trainerInterval = setInterval(function() {
-
                     if (!qSelectorAll(IMAGE)[i] || !(qSelectorAll(IMAGE)[i].style.background).includes(imageUrl)) {
                         clearInterval(trainerInterval);
                         return;
@@ -428,7 +421,6 @@
                         clearInterval(trainerInterval);
                         return;
                     }
-
                     if (qSelectorAll(IMAGE)[i] && (qSelectorAll(IMAGE)[i].style.background).includes(imageUrl) &&
                         qSelectorAll(TASK_IMAGE_BORDER)[i].style.opacity == 1 && !GM_getValue(src)) {
                         selectedImageCount = selectedImageCount + 1;
@@ -462,8 +454,6 @@
         }
         return tensorFlowMobileNetModel;
     }
-
-
     //Initialize TesseractWorker
     function initializeTesseractWorker() {
         if (!worker) {
@@ -472,7 +462,6 @@
     }
 
     function clickImages(response, imageUrl, word, i) {
-
         try {
             if (response && response.responseText && (qSelectorAll(IMAGE)[i].style.background).includes(imageUrl) &&
                 qSelectorAll(TASK_IMAGE_BORDER)[i].style.opacity == 0) {
@@ -484,7 +473,6 @@
                 } else if (responseJson.identify && responseJson.identify.alternatives) {
                     var alternatives = JSON.stringify(responseJson.identify.alternatives);
                     var alternativesJson = JSON.parse(alternatives);
-
                     for (var key in alternativesJson) {
                         if (alternativesJson.hasOwnProperty(key)) {
                             if ((alternativesJson[key].includesOneOf(word) || key.includesOneOf(word))) {
@@ -496,14 +484,11 @@
                 } else {
                     //No Match found
                 }
-
                 selectedImageCount = selectedImageCount + 1;
-
             } else {
                 //console.log("Using Fallback TensorFlow");
                 matchImagesUsingTensorFlow(imageUrl, word, i);
             }
-
         } catch (err) {
             //Using Fallback TensorFlow
             //console.log(err.message);
@@ -568,7 +553,6 @@
             NEW_WORD_IDENTIFIED = true;
             console.log("Word does not match. New type identified::" + word);
         }
-
         return word
     }
 
@@ -586,8 +570,7 @@
             } else {
                 return;
             }
-
-        }, 250);
+        }, 25);
     } else {
 
         try {
@@ -595,7 +578,6 @@
             await initializeTensorFlowModel();
             await initializeTensorFlowMobilenetModel();
             selectImages();
-
         } catch (err) {
             console.log(err);
             console.log("Tesseract could not be initialized");
@@ -647,7 +629,6 @@
         if (!imageUrl || !imageUrl.includes("https")) {
             return 0;
         }
-
         return imageUrl;
     }
 
@@ -740,7 +721,6 @@
                 .getBase64(Jimp.AUTO, function(err, src) {
                     var img = document.createElement("img");
                     img.setAttribute("src", src);
-
                     worker.recognize(img, LANGUAGE_FOR_OCR).then(function(data) {
                         //Remove Image After recognizing
                         img.removeAttribute("src");
@@ -758,7 +738,6 @@
     }
 
     function preProcessImageMethod2(base64Image, trimageUrl) {
-
         //Multi Contrast darken and brighten
         Jimp.read(base64Image).then(function(data) {
             data.color([{
@@ -829,7 +808,6 @@
                     });
                 });
         });
-
     }
 
     function postProcessImage(data) {
@@ -892,10 +870,8 @@
     }
 
     function areExampleImageUrlsChanged() {
-
         var prevExampleUrls = exampleImageList;
         currentExampleUrls = [];
-
         if (qSelectorAll(CHALLENGE_IMAGE).length > 0) {
             for (let i = 0; i < qSelectorAll(CHALLENGE_IMAGE).length; i++) {
                 var urlString = qSelectorAll(CHALLENGE_IMAGE)[i].style.background;
@@ -907,13 +883,10 @@
                 currentExampleUrls[i] = imageUrl;
             }
         }
-
         if (prevExampleUrls.length != currentExampleUrls.length) {
             return true;
         }
-
         for (let i = 0; i < currentExampleUrls.length; i++) {
-
             if (prevExampleUrls[i] != currentExampleUrls[i]) {
                 return true;
             }
@@ -923,7 +896,6 @@
 
     async function identifyObjectsFromImages(imageUrlList) {
         identifiedObjectsList = [];
-
         for (let i = 0; i < imageUrlList.length; i++) {
             try {
                 let img = new Image();
@@ -954,7 +926,6 @@
 
     async function identifyObjectsFromImagesUsingMobileNet(imageUrlList) {
         identifiedObjectsList = [];
-
         for (let i = 0; i < imageUrlList.length; i++) {
             try {
                 let img = new Image();
@@ -976,17 +947,13 @@
                                     hashSet.add(predictions[j].className);
                                 }
                             }
-
                             hashSet.forEach((key) => {
                                 identifiedObjectsList.push(key);
                             });
-
                             img.removeAttribute("src");
-
                             if (i == imageUrlList.length - 1) {
                                 identifyObjectsFromImagesCompleted = true;
                             }
-
                         })
                 }
             } catch (e) {
@@ -1014,9 +981,7 @@
                 objectKey = key;
                 maxCount = value;
             }
-
         });
-
         return objectKey;
     }
 
@@ -1031,7 +996,6 @@
                 // Set a timeout if you want to see the text
                 qSelector(SUBMIT_BUTTON).click();
             }
-
         } catch (err) {
             console.log(err.message);
         }
@@ -1061,15 +1025,12 @@
                     await delay(1000)
                 }
                 identifyObjectsFromImagesCompleted = false;
-
                 word = getWordFromIdentifiedObjects(identifiedObjectsList);
             }
             return word;
-
         } else {
             return getWordFromIdentifiedObjects(identifiedObjectsList);
         }
-
         return word;
     }
 
@@ -1085,7 +1046,6 @@
             prevObject == qSelector(PROMPT_TEXT).innerText) {
             return false;
         }
-
         return true;
     }
     async function identifyWord() {
@@ -1097,7 +1057,6 @@
                     word = word.replace(SENTENCE_TEXT_A, '');
                     word = word.replace(SENTENCE_TEXT_AN, '');
                 }
-
                 if (word.equalsOneOf(TRANSPORT_TYPES) || word == VERTICAL_RIVER) {
                     return word;
                 } else {
@@ -1123,22 +1082,18 @@
                     }
                 }
             } else {
-
                 //If word is not english
                 //Identify Images from Example
                 word = await identifyWordFromExamples();
             }
-
         } catch (e) {
             console.log(e);
         }
-
         return word;
     }
     var prevWord = "";
 
     async function selectImages() {
-
         if (ENABLE_DEFAULT_LANGUAGE) {
             for (let i = 0; i < qSelectorAll(LANGUAGE_SELECTOR).length; i++) {
                 if (qSelectorAll(LANGUAGE_SELECTOR)[i].innerText == DEFAULT_LANGUAGE) {
@@ -1151,13 +1106,10 @@
         if (qSelectorAll(IMAGE) && qSelectorAll(IMAGE).length == 9 && qSelector(NO_SELECTION).getAttribute(ARIA_HIDDEN) != true) {
             selectedImageCount = 0;
             try {
-
                 if (isObjectChanged()) {
                     prevWord = await identifyWord();
                 }
-
                 var word = prevWord;
-
                 if (word == -1 && skipCount >= MAX_SKIPS) {
                     console.log("Max Retries Attempted. Captcha cannot be solved");
                     return;
@@ -1176,7 +1128,6 @@
                 console.log(err.message);
                 return selectImagesAfterDelay(5);
             }
-
             var imageList = [];
             try {
                 imageList = getImageList();
@@ -1218,7 +1169,6 @@
                 }
             }
             waitUntilImageSelection();
-
         } else {
             waitForImagesToAppear();
         }

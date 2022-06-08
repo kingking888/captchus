@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Helidrops Free coins Auto Claim
 // @namespace    Auto Claim Helidrop
-// @version      1.3
+// @version      1.4
 // @description  Auto Claim from manual faucet
 // @author       Moryata
 // @match        https://helidrops.io/*

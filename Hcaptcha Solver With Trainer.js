@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Hcaptcha Solver Mode Trainer
 // @namespace     Captchus Model H Plus
-// @version      14.1
+// @version      14.2
 // @description  Automatically solves Hcaptcha in browser
 // @author       Moryata
 // @match        https://*.hcaptcha.com/*hcaptcha-challenge*
@@ -350,7 +350,7 @@
                         clearInterval(trainerInterval);
                         return;
                     }
-                }, 1000);
+                }, 5000);
             });
         });
     }

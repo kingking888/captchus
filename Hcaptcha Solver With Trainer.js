@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Hcaptcha Solver Mode Trainer
 // @namespace     Captchus Model H Plus
-// @version      14.0
+// @version      14.1
 // @description  Automatically solves Hcaptcha in browser
 // @author       Moryata
 // @match        https://*.hcaptcha.com/*hcaptcha-challenge*
@@ -232,7 +232,7 @@
                     .then(function(predictions) {
                         var predictionslen = predictions.length;
                         for (var j = 0; j < predictionslen; j++) {
-                            var probability = 0.050;
+                            var probability = 0.070;
                             if (probabilityForObject.get(predictions[j].className)) {
                                 probability = probabilityForObject.get(predictions[j].className);
                             }
@@ -350,7 +350,7 @@
                         clearInterval(trainerInterval);
                         return;
                     }
-                }, 3000);
+                }, 1000);
             });
         });
     }
@@ -496,7 +496,7 @@
             } else {
                 return;
             }
-        }, 250);
+        }, 25);
     } else {
 
         try {
@@ -510,7 +510,7 @@
     function selectImagesAfterDelay(delay) {
         setTimeout(function() {
             selectImages();
-        }, delay * 1250);
+        }, delay * 750);
     }
 
     function triggerEvent(el, type) {
@@ -947,7 +947,7 @@
             }
             identifyObjectsFromImages(exampleImageList);
             while (!identifyObjectsFromImagesCompleted) {
-                await delay(250)
+                await delay(550)
             }
             identifyObjectsFromImagesCompleted = true;
             word = await getWordFromIdentifiedObjects(identifiedObjectsList);
@@ -957,7 +957,7 @@
                 await initializeTensorFlowMobilenetModel();
                 identifyObjectsFromImagesUsingMobileNet(exampleImageList);
                 while (!identifyObjectsFromImagesCompleted) {
-                    await delay(250)
+                    await delay(550)
                 }
                 identifyObjectsFromImagesCompleted = true;
                 word = getWordFromIdentifiedObjects(identifiedObjectsList);

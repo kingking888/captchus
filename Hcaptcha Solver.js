@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Hcaptcha Solver Mode OCR
 // @namespace    Captchus Model H
-// @version       5.6
+// @version       5.7
 // @description  Automatically solves Hcaptcha in browser
 // @author       Moryata
 // @match        https://*.hcaptcha.com/*hcaptcha-challenge*
@@ -98,7 +98,7 @@
 	const LANGUAGE_FOR_OCR = "eng";
 	// Option to override the default image matching
 	// Enabling this by default
-	const ENABLE_TENSORFLOW = true;
+	let ENABLE_TENSORFLOW = true;
 	// Max Skips that can be done while solving the captcha
 	// This is likely not to happen, if it occurs retry for new images
 	const MAX_SKIPS = 10;
@@ -286,7 +286,7 @@
 					.then(function(predictions) {
 						var predictionslen = predictions.length;
 						for (var j = 0; j < predictionslen; j++) {
-							var probability = 0.077;
+							var probability = 0.055;
 							if (probabilityForObject.get(predictions[j].className)) {
 								probability = probabilityForObject.get(predictions[j].className);
 							}
@@ -555,7 +555,7 @@
 	function selectImagesAfterDelay(delay) {
 		setTimeout(function() {
 			selectImages();
-		}, delay * 700);
+		}, delay * 1000);
 	}
 
 	function triggerEvent(el, type) {
@@ -639,7 +639,7 @@
 				}
 				return selectImagesAfterDelay(5);
 			} else {}
-		}, 3000);
+		}, 1000);
 	}
 
 	function waitForImagesToAppear() {
@@ -668,7 +668,7 @@
 					}
 				}
 			}
-		}, 5000);
+		}, 3000);
 	}
 	//TODO: Convert Image to base64 to avoid multiple calls
 	function preProcessImage(base64Image, imageUrl) {
@@ -756,7 +756,7 @@
 		//Resize the image
 		Jimp.read(base64Image).then(function(data) {
 			data.resize(256, Jimp.AUTO)
-				.quality(75) // set JPEG quality
+				.quality(100) // set JPEG quality
 				.greyscale() // set greyscale
 				.getBase64(Jimp.AUTO, function(err, src) {
 					var img = document.createElement("img");

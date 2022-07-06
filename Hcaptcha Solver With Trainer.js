@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Hcaptcha Solver Mode Trainer
 // @namespace     Captchus Model H Plus
-// @version      14.2
+// @version      14.3
 // @description  Automatically solves Hcaptcha in browser
 // @author       Moryata
 // @match        https://*.hcaptcha.com/*hcaptcha-challenge*
@@ -107,14 +107,14 @@
 
     // Option to override the default image matching
     // Enabling this by default
-    let ENABLE_TENSORFLOW = true;
+    let ENABLE_TENSORFLOW = false;
 
     // Max Skips that can be done while solving the captcha
     // This is likely not to happen, if it occurs retry for new images
     const MAX_SKIPS = 25;
     var skipCount = 0;
 
-    var USE_MOBILE_NET = true;
+    var USE_MOBILE_NET = false;
     var USE_COLOUR_PATTERN = false;
     var NEW_WORD_IDENTIFIED = false;
 
@@ -232,7 +232,7 @@
                     .then(function(predictions) {
                         var predictionslen = predictions.length;
                         for (var j = 0; j < predictionslen; j++) {
-                            var probability = 0.070;
+                            var probability = 0.080;
                             if (probabilityForObject.get(predictions[j].className)) {
                                 probability = probabilityForObject.get(predictions[j].className);
                             }
@@ -510,7 +510,7 @@
     function selectImagesAfterDelay(delay) {
         setTimeout(function() {
             selectImages();
-        }, delay * 750);
+        }, delay * 700);
     }
 
     function triggerEvent(el, type) {
@@ -598,7 +598,7 @@
                 return selectImagesAfterDelay(5);
             } else {
             }
-        }, 1000);
+        }, 3000);
     }
 
     function waitForImagesToAppear() {
@@ -725,7 +725,7 @@
         //Resize the image
         Jimp.read(base64Image).then(function(data) {
             data.resize(256, Jimp.AUTO)
-                .quality(95) // set JPEG quality
+                .quality(75) // set JPEG quality
                 .greyscale() // set greyscale
                 .getBase64(Jimp.AUTO, function(err, src) {
                     var img = document.createElement("img");
@@ -947,7 +947,7 @@
             }
             identifyObjectsFromImages(exampleImageList);
             while (!identifyObjectsFromImagesCompleted) {
-                await delay(550)
+                await delay(1550)
             }
             identifyObjectsFromImagesCompleted = true;
             word = await getWordFromIdentifiedObjects(identifiedObjectsList);
@@ -957,7 +957,7 @@
                 await initializeTensorFlowMobilenetModel();
                 identifyObjectsFromImagesUsingMobileNet(exampleImageList);
                 while (!identifyObjectsFromImagesCompleted) {
-                    await delay(550)
+                    await delay(1550)
                 }
                 identifyObjectsFromImagesCompleted = true;
                 word = getWordFromIdentifiedObjects(identifiedObjectsList);
@@ -1058,7 +1058,7 @@
             for (let i = 0; i < qSelectorAll(LANGUAGE_SELECTOR).length; i++) {
                 if (qSelectorAll(LANGUAGE_SELECTOR)[i].innerText == DEFAULT_LANGUAGE) {
                     document.querySelectorAll(LANGUAGE_SELECTOR)[i].click();
-                    await delay(250);
+                    await delay(25);
                 }
             }
         }

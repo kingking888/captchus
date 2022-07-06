@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Hcaptcha Solver Mode OCR
 // @namespace    Captchus Model H
-// @version       5.4
+// @version       5.5
 // @description  Automatically solves Hcaptcha in browser
 // @author       Moryata
 // @match        https://*.hcaptcha.com/*hcaptcha-challenge*
@@ -286,7 +286,7 @@
 					.then(function(predictions) {
 						var predictionslen = predictions.length;
 						for (var j = 0; j < predictionslen; j++) {
-							var probability = 0.075;
+							var probability = 0.055;
 							if (probabilityForObject.get(predictions[j].className)) {
 								probability = probabilityForObject.get(predictions[j].className);
 							}
@@ -555,7 +555,7 @@
 	function selectImagesAfterDelay(delay) {
 		setTimeout(function() {
 			selectImages();
-		}, delay * 550);
+		}, delay * 700);
 	}
 
 	function triggerEvent(el, type) {
@@ -639,7 +639,7 @@
 				}
 				return selectImagesAfterDelay(5);
 			} else {}
-		}, 1500);
+		}, 700);
 	}
 
 	function waitForImagesToAppear() {
@@ -668,7 +668,7 @@
 					}
 				}
 			}
-		}, 5000);
+		}, 3000);
 	}
 	//TODO: Convert Image to base64 to avoid multiple calls
 	function preProcessImage(base64Image, imageUrl) {

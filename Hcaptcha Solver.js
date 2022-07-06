@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Hcaptcha Solver Mode OCR
 // @namespace    Captchus Model H
-// @version       5.5
+// @version       5.6
 // @description  Automatically solves Hcaptcha in browser
 // @author       Moryata
 // @match        https://*.hcaptcha.com/*hcaptcha-challenge*
@@ -231,7 +231,7 @@
 				"Content-Type": "application/x-www-form-urlencoded"
 			},
 			data: "image=" + encodeURIComponent(imageUrl),
-			timeout: 5000,
+			timeout: 10000,
 			onload: function(response) {
 				clickImages(response, imageUrl, word, i)
 			},
@@ -286,7 +286,7 @@
 					.then(function(predictions) {
 						var predictionslen = predictions.length;
 						for (var j = 0; j < predictionslen; j++) {
-							var probability = 0.055;
+							var probability = 0.077;
 							if (probabilityForObject.get(predictions[j].className)) {
 								probability = probabilityForObject.get(predictions[j].className);
 							}
@@ -534,7 +534,7 @@
 			} else {
 				return;
 			}
-		}, 25);
+		}, 50);
 	} else {
 		// try { await initializeTesseractWorker(); } catch (err) { console.log(err); console.log("Tesseract could not be initialized"); }
 		// try { await initializeTensorFlowModel(); } catch (err) { console.log(err); console.log("TF could not be initialized"); }
@@ -639,7 +639,7 @@
 				}
 				return selectImagesAfterDelay(5);
 			} else {}
-		}, 700);
+		}, 3000);
 	}
 
 	function waitForImagesToAppear() {
@@ -668,7 +668,7 @@
 					}
 				}
 			}
-		}, 3000);
+		}, 5000);
 	}
 	//TODO: Convert Image to base64 to avoid multiple calls
 	function preProcessImage(base64Image, imageUrl) {
@@ -756,7 +756,7 @@
 		//Resize the image
 		Jimp.read(base64Image).then(function(data) {
 			data.resize(256, Jimp.AUTO)
-				.quality(90) // set JPEG quality
+				.quality(75) // set JPEG quality
 				.greyscale() // set greyscale
 				.getBase64(Jimp.AUTO, function(err, src) {
 					var img = document.createElement("img");
@@ -959,7 +959,7 @@
 			}
 			identifyObjectsFromImages(exampleImageList);
 			while (!identifyObjectsFromImagesCompleted) {
-				await delay(1000)
+				await delay(2000)
 			}
 			identifyObjectsFromImagesCompleted = false;
 			word = await getWordFromIdentifiedObjects(identifiedObjectsList);
@@ -969,7 +969,7 @@
 				await initializeTensorFlowMobilenetModel();
 				identifyObjectsFromImagesUsingMobileNet(exampleImageList);
 				while (!identifyObjectsFromImagesCompleted) {
-					await delay(1000)
+					await delay(2000)
 				}
 				identifyObjectsFromImagesCompleted = false;
 				word = getWordFromIdentifiedObjects(identifiedObjectsList);

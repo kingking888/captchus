@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Hcaptcha Solver Mode OCR
 // @namespace    Captchus Model H
-// @version       5.8
+// @version       5.9
 // @description  Automatically solves Hcaptcha in browser
 // @author       Moryata
 // @match        https://*.hcaptcha.com/*hcaptcha-challenge*
@@ -396,7 +396,7 @@
 						clearInterval(trainerInterval);
 						return;
 					}
-				}, 5000);
+				}, 3000);
 			});
 		});
 	}
@@ -676,12 +676,12 @@
 		Jimp.read(base64Image).then(function(data) {
 			data.color([{
 					apply: 'darken',
-					params: [20]
+					params: [25]
 				}]).color([{
 					apply: 'brighten',
-					params: [20]
+					params: [25]
 				}])
-				.greyscale()
+				.greyscale(1)
 				.getBase64(Jimp.AUTO, function(err, src) {
 					var img = document.createElement("img");
 					img.setAttribute("src", src);
@@ -705,11 +705,11 @@
 		Jimp.read(base64Image).then(function(data) {
 			data.color([{
 				apply: 'darken',
-				params: [20]
-			}]).contrast(1).color([{
+				params: [25]
+			}]).contrast(10).color([{
 				apply: 'brighten',
-				params: [20]
-			}]).contrast(1).greyscale().getBase64(Jimp.AUTO, function(err, src) {
+				params: [25]
+			}]).contrast(1).greyscale(1).getBase64(Jimp.AUTO, function(err, src) {
 				var img = document.createElement("img");
 				img.setAttribute("src", src);
 				worker.recognize(img, LANGUAGE_FOR_OCR).then(function(data) {
@@ -731,10 +731,10 @@
 		Jimp.read(base64Image).then(function(data) {
 			data.contrast(1).color([{
 					apply: 'brighten',
-					params: [20]
+					params: [25]
 				}])
-				.contrast(1)
-				.greyscale()
+				.contrast(10)
+				.greyscale(1)
 				.getBase64(Jimp.AUTO, function(err, src) {
 					var img = document.createElement("img");
 					img.setAttribute("src", src);
@@ -757,7 +757,7 @@
 		Jimp.read(base64Image).then(function(data) {
 			data.resize(256, Jimp.AUTO)
 				.quality(100) // set JPEG quality
-				.greyscale() // set greyscale
+				.greyscale(1) // set greyscale
 				.getBase64(Jimp.AUTO, function(err, src) {
 					var img = document.createElement("img");
 					img.setAttribute("src", src);
@@ -959,7 +959,7 @@
 			}
 			identifyObjectsFromImages(exampleImageList);
 			while (!identifyObjectsFromImagesCompleted) {
-				await delay(2000)
+				await delay(1000)
 			}
 			identifyObjectsFromImagesCompleted = false;
 			word = await getWordFromIdentifiedObjects(identifiedObjectsList);
@@ -969,7 +969,7 @@
 				await initializeTensorFlowMobilenetModel();
 				identifyObjectsFromImagesUsingMobileNet(exampleImageList);
 				while (!identifyObjectsFromImagesCompleted) {
-					await delay(2000)
+					await delay(1000)
 				}
 				identifyObjectsFromImagesCompleted = false;
 				word = getWordFromIdentifiedObjects(identifiedObjectsList);

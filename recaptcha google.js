@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Recaptcha Solver
 // @namespace    Recaptcha Solver
-// @version      2.5
+// @version      2.6
 // @description  Recaptcha Solver in Browser | Automatically solves Recaptcha in browser
 // @author       moryata
 // @match        *://*/recaptcha/*
@@ -55,7 +55,7 @@
         URL = URL.replace("recaptcha.net", "google.com");
         if (recaptchaLanguage.length < 1) {
             console.log("Recaptcha Language is not recognized");
-            recaptchaLanguage = "en-US";
+            recaptchaLanguage = "en";
         }
         console.log("Recaptcha Language is " + recaptchaLanguage);
 

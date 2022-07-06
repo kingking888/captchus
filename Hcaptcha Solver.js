@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Hcaptcha Solver Mode OCR
 // @namespace    Captchus Model H
-// @version       5.7
+// @version       5.8
 // @description  Automatically solves Hcaptcha in browser
 // @author       Moryata
 // @match        https://*.hcaptcha.com/*hcaptcha-challenge*
@@ -470,9 +470,9 @@
 		return document.querySelector(selector);
 	}
 	async function getSynonyms(word) {
-		USE_MOBILE_NET = false;
+		USE_MOBILE_NET = true;
 		USE_COLOUR_PATTERN = false;
-		NEW_WORD_IDENTIFIED = false;
+		NEW_WORD_IDENTIFIED = true;
 		//TODO: Format this to JSON string
 		if (word == MOTORBUS || word == BUS) {
 			word = ['bus', 'motorbus'];

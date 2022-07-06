@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Recaptcha Solver
 // @namespace    Recaptcha Solver
-// @version      2.4
+// @version      2.5
 // @description  Recaptcha Solver in Browser | Automatically solves Recaptcha in browser
 // @author       moryata
 // @match        *://*/recaptcha/*
@@ -12,7 +12,7 @@
 (function() {
     'use strict';
     var solved = false;
-    var checkBoxClicked = false;
+    var checkBoxClicked = true;
     var waitingForAudioResponse = false;
     //Node Selectors
     const CHECK_BOX = ".recaptcha-checkbox-border";
@@ -33,14 +33,14 @@
     var audioUrl = "";
     var recaptchaInitialStatus = qSelector(RECAPTCHA_STATUS) ? qSelector(RECAPTCHA_STATUS).innerText : ""
     var serversList = ["https://engageub.pythonanywhere.com", "https://engageub1.pythonanywhere.com"];
-    var latencyList = Array(serversList.length).fill(250);
+    var latencyList = Array(serversList.length).fill(255);
     //Check for visibility && Click the check box
     function isHidden(el) {
         return (el.offsetParent === null)
     }
 
     async function getTextFromAudio(URL) {
-        var minLatency = 250;
+        var minLatency = 255;
         var url = "";
 
         //Selecting the last/latest server by default if latencies are equal
@@ -202,6 +202,6 @@
             console.log("An error occurred while solving. Stopping the solver.");
             clearInterval(startInterval);
         }
-    }, 2500);
+    }, 1000);
 
 })();

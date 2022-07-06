@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Hcaptcha Solver Mode Trainer
 // @namespace     Captchus Model H Plus
-// @version      14.3
+// @version      14.4
 // @description  Automatically solves Hcaptcha in browser
 // @author       Moryata
 // @match        https://*.hcaptcha.com/*hcaptcha-challenge*
@@ -107,11 +107,11 @@
 
     // Option to override the default image matching
     // Enabling this by default
-    let ENABLE_TENSORFLOW = false;
+    let ENABLE_TENSORFLOW = true;
 
     // Max Skips that can be done while solving the captcha
     // This is likely not to happen, if it occurs retry for new images
-    const MAX_SKIPS = 25;
+    const MAX_SKIPS = 10;
     var skipCount = 0;
 
     var USE_MOBILE_NET = false;
@@ -232,7 +232,7 @@
                     .then(function(predictions) {
                         var predictionslen = predictions.length;
                         for (var j = 0; j < predictionslen; j++) {
-                            var probability = 0.080;
+                            var probability = 0.070;
                             if (probabilityForObject.get(predictions[j].className)) {
                                 probability = probabilityForObject.get(predictions[j].className);
                             }
@@ -496,7 +496,7 @@
             } else {
                 return;
             }
-        }, 25);
+        }, 50);
     } else {
 
         try {
@@ -510,7 +510,7 @@
     function selectImagesAfterDelay(delay) {
         setTimeout(function() {
             selectImages();
-        }, delay * 700);
+        }, delay * 1000);
     }
 
     function triggerEvent(el, type) {
@@ -598,7 +598,7 @@
                 return selectImagesAfterDelay(5);
             } else {
             }
-        }, 3000);
+        }, 1500);
     }
 
     function waitForImagesToAppear() {
@@ -627,7 +627,7 @@
                     }
                 }
             }
-        }, 5000);
+        }, 3000);
     }
 
     //TODO: Convert Image to base64 to avoid multiple calls

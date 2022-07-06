@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Hcaptcha Solver Mode OCR
 // @namespace    Captchus Model H
-// @version       5.3
+// @version       5.4
 // @description  Automatically solves Hcaptcha in browser
 // @author       Moryata
 // @match        https://*.hcaptcha.com/*hcaptcha-challenge*
@@ -639,7 +639,7 @@
 				}
 				return selectImagesAfterDelay(5);
 			} else {}
-		}, 3000);
+		}, 1500);
 	}
 
 	function waitForImagesToAppear() {
@@ -959,7 +959,7 @@
 			}
 			identifyObjectsFromImages(exampleImageList);
 			while (!identifyObjectsFromImagesCompleted) {
-				await delay(2000)
+				await delay(1000)
 			}
 			identifyObjectsFromImagesCompleted = false;
 			word = await getWordFromIdentifiedObjects(identifiedObjectsList);
@@ -969,7 +969,7 @@
 				await initializeTensorFlowMobilenetModel();
 				identifyObjectsFromImagesUsingMobileNet(exampleImageList);
 				while (!identifyObjectsFromImagesCompleted) {
-					await delay(2000)
+					await delay(1000)
 				}
 				identifyObjectsFromImagesCompleted = false;
 				word = getWordFromIdentifiedObjects(identifiedObjectsList);

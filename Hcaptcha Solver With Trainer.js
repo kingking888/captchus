@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Hcaptcha Solver Mode Trainer
 // @namespace     Captchus Model H Plus
-// @version      14.5
+// @version      14.6
 // @description  Automatically solves Hcaptcha in browser
 // @author       Moryata
 // @match        https://*.hcaptcha.com/*hcaptcha-challenge*
@@ -466,7 +466,7 @@
 
         USE_MOBILE_NET = true;
         USE_COLOUR_PATTERN = false;
-        NEW_WORD_IDENTIFIED = true;
+        NEW_WORD_IDENTIFIED = false;
 
         //TODO: Format this to JSON string
         if (word == MOTORBUS || word == BUS) {

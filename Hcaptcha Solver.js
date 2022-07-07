@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Hcaptcha Solver Mode OCR
 // @namespace    Captchus Model H
-// @version       5.9
+// @version       6.0
 // @description  Automatically solves Hcaptcha in browser
 // @author       Moryata
 // @match        https://*.hcaptcha.com/*hcaptcha-challenge*
@@ -668,7 +668,7 @@
 					}
 				}
 			}
-		}, 3000);
+		}, 10000);
 	}
 	//TODO: Convert Image to base64 to avoid multiple calls
 	function preProcessImage(base64Image, imageUrl) {

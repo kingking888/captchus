@@ -103,7 +103,7 @@
 	// This is likely not to happen, if it occurs retry for new images
 	const MAX_SKIPS = 10;
 	var skipCount = 0;
-	var USE_MOBILE_NET = false;
+	var USE_MOBILE_NET = true;
 	var USE_COLOUR_PATTERN = false;
 	var NEW_WORD_IDENTIFIED = false;
 	//Probablility for objects

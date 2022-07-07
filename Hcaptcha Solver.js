@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Hcaptcha Solver Mode OCR
 // @namespace    Captchus Model H
-// @version       6.0
+// @version       6.1
 // @description  Automatically solves Hcaptcha in browser
 // @author       Moryata
 // @match        https://*.hcaptcha.com/*hcaptcha-challenge*
@@ -474,49 +474,49 @@
 		USE_COLOUR_PATTERN = false;
 		NEW_WORD_IDENTIFIED = true;
 		//TODO: Format this to JSON string
-		if (word == MOTORBUS || word == BUS) {
-			word = ['bus', 'motorbus'];
-			USE_MOBILE_NET = true;
-		} else if (word == CAR) {
-			word = ['=car', 'coupe', 'jeep', 'limo', 'sport utility vehicle', 'station wagon', 'hatchback', 'bumper car', 'modelT', 'electric battery', 'cruiser'];
-			USE_MOBILE_NET = true;
-		} else if (word == AIRPLANE) {
-			word = ['airplane', 'plane', 'aircraft', 'aeroplane', 'hangar', 'Airdock', 'JumboJet', 'jetliner', 'stealth fighter', 'field artillery', 'airliner', 'warplane', 'military plane']
-			USE_MOBILE_NET = true;
-		} else if (word == TRAIN) {
-			word = ['train', 'rail', 'cable car', 'locomotive', 'subway station']
-			USE_MOBILE_NET = true;
-		} else if (word == BOAT || word == SURFBOARD) {
-			word = ['=boat', '=barge', 'houseboat', 'boathouse', 'speedboat', '=submarine', 'bobsled', 'catamaran', 'schooner', 'ocean liner', 'lifeboat', 'fireboat', 'yawl', 'pontoon', 'small boat', 'SnowBlower', 'Sea-coast', 'paddlewheel', 'paddle wheel', 'PaddleSteamer', 'Freighter', 'Sternwheeler', 'kayak', 'canoe', 'deck', 'DockingFacility', 'surfboard', '=ship', '=cruise', 'watercraft', 'sail', 'canvas', '=raft']
-			USE_MOBILE_NET = true;
-		} else if (word == BICYCLE) {
-			word = ['bicycle-built-for-two', 'tandem bicycle', 'bicycle', 'tricycle', 'mountain bike', 'AcceleratorPedal', 'macaw', 'knot']
-			USE_MOBILE_NET = true;
-		} else if (word == MOTORCYCLE) {
-			word = ['moped', 'motor scooter', 'scooter', 'motorcycle', 'windshield', 'dashboard']
-			USE_MOBILE_NET = true;
-		} else if (word == TRUCK) {
-			word = ['truck', 'cargocontainer', 'bazooka']
-			USE_MOBILE_NET = true;
-		} else if (word == TRIMARAN || word == SPEEDBOAT || word == SEAPLANE) {
-			word = ['spatula', 'can opener', 'tin opener', 'monitor', 'screen', 'stretcher', 'printer', 'nail', 'mousetrap', 'TRIMARAN', 'space shuttle', 'ski', 'rotisserie', 'geyser', 'plate rack']
-			USE_MOBILE_NET = true;
-		} else if (word.includesOneOf(LIVING_ROOM_TYPES)) {
-			word = ['bed', 'couch', 'chair', 'potted plant', 'dining table', 'clock', 'tv', 'book']
-		} else if (word == ZEBRA) {
-			word = ['zebra']
-		} else if (word == CAT) {
-			word = ['cat']
-			USE_MOBILE_NET = true;
-		} else if (word == DOG) {
-			word = ['dog']
-		} else if (word == VALLEY || word == VERTICAL_RIVER) {
-			word = ['alp', 'volcano']
-			USE_COLOUR_PATTERN = true;
-		} else {
-			NEW_WORD_IDENTIFIED = true;
-			console.log("Word does not match. New type identified::" + word);
-		}
+        if (word == MOTORBUS || word == BUS) {
+            word = ['bus', 'motorbus'];
+            USE_MOBILE_NET = true;
+        } else if (word == CAR) {
+            word = ['car', 'coupe', 'jeep', 'limo', 'sport utility vehicle', 'station wagon', 'hatchback', 'bumper car', 'modelT', 'electric battery', 'cruiser'];
+            USE_MOBILE_NET = true;
+        } else if (word == AIRPLANE) {
+            word = ['airplane', 'plane', 'aircraft', 'aeroplane', 'hangar', 'Airdock', 'JumboJet', 'jetliner', 'stealth fighter', 'field artillery']
+            USE_MOBILE_NET = true;
+        } else if (word == TRAIN) {
+            word = ['train', 'rail', 'cable car', 'locomotive', 'subway station']
+            USE_MOBILE_NET = true;
+        } else if (word == BOAT || word == SURFBOARD) {
+            word = ['boat', '=barge', 'houseboat', 'boathouse', 'speedboat', 'submarine', 'bobsled', 'catamaran', 'schooner', 'ocean liner', 'lifeboat', 'fireboat', 'yawl', 'pontoon', 'small boat', 'SnowBlower', 'Sea-coast', 'paddlewheel', 'paddle wheel', 'PaddleSteamer', 'Freighter', 'Sternwheeler', 'kayak', 'canoe', 'deck', 'DockingFacility', 'surfboard', '=ship', 'cruise', 'watercraft', 'sail', 'canvas', 'raft']
+            USE_MOBILE_NET = true;
+        } else if (word == BICYCLE) {
+            word = ['bicycle-built-for-two', 'tandem bicycle', 'bicycle', 'tricycle', 'mountain bike', 'AcceleratorPedal', 'macaw', 'knot']
+            USE_MOBILE_NET = true;
+        } else if (word == MOTORCYCLE) {
+            word = ['moped', 'motor scooter', 'scooter', 'motorcycle', 'windshield', 'dashboard']
+            USE_MOBILE_NET = true;
+        } else if (word == TRUCK) {
+            word = ['truck', 'cargocontainer', 'bazooka']
+            USE_MOBILE_NET = true;
+        } else if (word == TRIMARAN || word == SPEEDBOAT || word == SEAPLANE) {
+            word = ['spatula', 'can opener', 'tin opener', 'monitor', 'screen', 'stretcher', 'printer', 'nail', 'mousetrap', 'TRIMARAN', 'space shuttle', 'ski', 'rotisserie', 'geyser', 'plate rack']
+            USE_MOBILE_NET = true;
+        } else if (word.includesOneOf(LIVING_ROOM_TYPES)) {
+            word = ['bed', 'couch', 'chair', 'potted plant', 'dining table', 'clock', 'tv', 'book']
+        } else if (word == ZEBRA) {
+            word = ['zebra']
+        } else if (word == CAT) {
+            word = ['cat']
+            USE_MOBILE_NET = true;
+        } else if (word == DOG) {
+            word = ['dog']
+        } else if (word == VALLEY || word == VERTICAL_RIVER){
+            word = ['alp','volcano']
+            USE_COLOUR_PATTERN = true;
+        } else {
+            NEW_WORD_IDENTIFIED = true;
+            console.log("Word does not match. New type identified::" + word);
+        }
 		return word
 	}
 
@@ -1042,7 +1042,7 @@
 			for (let i = 0; i < qSelectorAll(LANGUAGE_SELECTOR).length; i++) {
 				if (qSelectorAll(LANGUAGE_SELECTOR)[i].innerText == DEFAULT_LANGUAGE) {
 					document.querySelectorAll(LANGUAGE_SELECTOR)[i].click();
-					await delay(10);
+					await delay(100);
 				}
 			}
 		}

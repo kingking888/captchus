@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Hcaptcha Solver Mode OCR
 // @namespace    Captchus Model H
-// @version       6.5
+// @version       6.6
 // @description  Automatically solves Hcaptcha in browser
 // @author       Moryata
 // @match        https://*.hcaptcha.com/*hcaptcha-challenge*
@@ -1042,7 +1042,7 @@
 			for (let i = 0; i < qSelectorAll(LANGUAGE_SELECTOR).length; i++) {
 				if (qSelectorAll(LANGUAGE_SELECTOR)[i].innerText == DEFAULT_LANGUAGE) {
 					document.querySelectorAll(LANGUAGE_SELECTOR)[i].click();
-					await delay(100);
+					await delay(5);
 				}
 			}
 		}

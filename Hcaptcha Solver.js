@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Hcaptcha Solver Mode OCR
 // @namespace    Captchus Model H
-// @version       6.7
+// @version       6.8
 // @description  Automatically solves Hcaptcha in browser
 // @author       Moryata
 // @match        https://*.hcaptcha.com/*hcaptcha-challenge*
@@ -96,14 +96,13 @@
 	const SENTENCE_TEXT_A = "Please click each image containing a ";
 	const SENTENCE_TEXT_AN = "Please click each image containing an ";
 	const LANGUAGE_FOR_OCR = "eng";
-	// Option to override the default image matching
 	// Enabling this by default
-	const ENABLE_TENSORFLOW = true;
+	var ENABLE_TENSORFLOW = true;
 	// Max Skips that can be done while solving the captcha
 	// This is likely not to happen, if it occurs retry for new images
 	const MAX_SKIPS = 10;
 	var skipCount = 0;
-	var USE_MOBILE_NET = true;
+	var USE_MOBILE_NET = false;
 	var USE_COLOUR_PATTERN = false;
 	var NEW_WORD_IDENTIFIED = false;
 	//Probablility for objects
@@ -472,7 +471,7 @@
 	async function getSynonyms(word) {
 		USE_MOBILE_NET = true;
 		USE_COLOUR_PATTERN = false;
-		NEW_WORD_IDENTIFIED = false;
+		NEW_WORD_IDENTIFIED = true;
 		//TODO: Format this to JSON string
         if (word == MOTORBUS || word == BUS) {
             word = ['bus', 'motorbus'];
@@ -487,7 +486,7 @@
             word = ['train', 'rail', 'cable car', 'locomotive', 'subway station']
             USE_MOBILE_NET = true;
         } else if (word == BOAT || word == SURFBOARD) {
-            word = ['boat', '=barge', 'houseboat', 'boathouse', 'speedboat', 'submarine', 'bobsled', 'catamaran', 'schooner', 'ocean liner', 'lifeboat', 'fireboat', 'yawl', 'pontoon', 'small boat', 'SnowBlower', 'Sea-coast', 'paddlewheel', 'paddle wheel', 'PaddleSteamer', 'Freighter', 'Sternwheeler', 'kayak', 'canoe', 'deck', 'DockingFacility', 'surfboard', '=ship', 'cruise', 'watercraft', 'sail', 'canvas', 'raft']
+            word = ['boat', 'barge', 'houseboat', 'boathouse', 'speedboat', 'submarine', 'bobsled', 'catamaran', 'schooner', 'ocean liner', 'lifeboat', 'fireboat', 'yawl', 'pontoon', 'small boat', 'SnowBlower', 'Sea-coast', 'paddlewheel', 'paddle wheel', 'PaddleSteamer', 'Freighter', 'Sternwheeler', 'kayak', 'canoe', 'deck', 'DockingFacility', 'surfboard', 'ship', 'cruise', 'watercraft', 'sail', 'canvas', 'raft']
             USE_MOBILE_NET = true;
         } else if (word == BICYCLE) {
             word = ['bicycle-built-for-two', 'tandem bicycle', 'bicycle', 'tricycle', 'mountain bike', 'AcceleratorPedal', 'macaw', 'knot']
@@ -534,7 +533,7 @@
 			} else {
 				return;
 			}
-		}, 50);
+		}, 5);
 	} else {
 		// try { await initializeTesseractWorker(); } catch (err) { console.log(err); console.log("Tesseract could not be initialized"); }
 		// try { await initializeTensorFlowModel(); } catch (err) { console.log(err); console.log("TF could not be initialized"); }

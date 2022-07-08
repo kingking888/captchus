@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Hcaptcha Solver Mode OCR
 // @namespace    Captchus Model H
-// @version       7.0
+// @version       7.1
 // @description  Automatically solves Hcaptcha in browser
 // @author       Moryata
 // @match        https://*.hcaptcha.com/*hcaptcha-challenge*
@@ -18,8 +18,8 @@
 // @connect      https://cdn.jsdelivr.net
 // @connect      https://unpkg.com
 // @connect      https://*.hcaptcha.com/*
-// @require      https://unpkg.com/jimp@0.12.0/browser/lib/jimp.min.js
-// @require      https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/2.0.0-alpha.2/tesseract.min.js
+// @require      https://cdnjs.cloudflare.com/ajax/libs/jimp/0.16.1/jimp.js
+// @require      https://unpkg.com/tesseract.js@2.1.5/dist/tesseract.min.js
 // @require      https://cdn.jsdelivr.net/npm/@tensorflow/tfjs/dist/tf.min.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/2.1.5/worker.min.js
 // @require      https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd
@@ -42,7 +42,7 @@
 	const DEFAULT_LANGUAGE = LANG_ENGLISH;
 	const ENABLE_DEFAULT_LANGUAGE = true;
 	//Guess/Match New Images
-	const MATCH_IMAGES_USING_TRAINER = false;
+	let MATCH_IMAGES_USING_TRAINER = false;
 	const GUESS_NEW_IMAGE_TYPE = false;
 	//Node Selectors
 	const CHECK_BOX = "#checkbox";
@@ -469,7 +469,7 @@
 		return document.querySelector(selector);
 	}
 	async function getSynonyms(word) {
-		USE_MOBILE_NET = false;
+		USE_MOBILE_NET = true;
 		USE_COLOUR_PATTERN = false;
 		NEW_WORD_IDENTIFIED = false;
 		//TODO: Format this to JSON string

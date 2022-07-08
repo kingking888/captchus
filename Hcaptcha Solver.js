@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Hcaptcha Solver Mode OCR
 // @namespace    Captchus Model H
-// @version       6.8
+// @version       6.9
 // @description  Automatically solves Hcaptcha in browser
 // @author       Moryata
 // @match        https://*.hcaptcha.com/*hcaptcha-challenge*
@@ -97,12 +97,12 @@
 	const SENTENCE_TEXT_AN = "Please click each image containing an ";
 	const LANGUAGE_FOR_OCR = "eng";
 	// Enabling this by default
-	var ENABLE_TENSORFLOW = true;
+	let ENABLE_TENSORFLOW = true;
 	// Max Skips that can be done while solving the captcha
 	// This is likely not to happen, if it occurs retry for new images
 	const MAX_SKIPS = 10;
 	var skipCount = 0;
-	var USE_MOBILE_NET = false;
+	var USE_MOBILE_NET = true;
 	var USE_COLOUR_PATTERN = false;
 	var NEW_WORD_IDENTIFIED = false;
 	//Probablility for objects
@@ -471,7 +471,7 @@
 	async function getSynonyms(word) {
 		USE_MOBILE_NET = true;
 		USE_COLOUR_PATTERN = false;
-		NEW_WORD_IDENTIFIED = true;
+		NEW_WORD_IDENTIFIED = false;
 		//TODO: Format this to JSON string
         if (word == MOTORBUS || word == BUS) {
             word = ['bus', 'motorbus'];
@@ -667,7 +667,7 @@
 					}
 				}
 			}
-		}, 10000);
+		}, 5000);
 	}
 	//TODO: Convert Image to base64 to avoid multiple calls
 	function preProcessImage(base64Image, imageUrl) {
@@ -958,7 +958,7 @@
 			}
 			identifyObjectsFromImages(exampleImageList);
 			while (!identifyObjectsFromImagesCompleted) {
-				await delay(1000)
+				await delay(3000)
 			}
 			identifyObjectsFromImagesCompleted = false;
 			word = await getWordFromIdentifiedObjects(identifiedObjectsList);
@@ -968,7 +968,7 @@
 				await initializeTensorFlowMobilenetModel();
 				identifyObjectsFromImagesUsingMobileNet(exampleImageList);
 				while (!identifyObjectsFromImagesCompleted) {
-					await delay(1000)
+					await delay(3000)
 				}
 				identifyObjectsFromImagesCompleted = false;
 				word = getWordFromIdentifiedObjects(identifiedObjectsList);

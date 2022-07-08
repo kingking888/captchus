@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Hcaptcha Solver Mode OCR
 // @namespace    Captchus Model H
-// @version       6.6
+// @version       6.7
 // @description  Automatically solves Hcaptcha in browser
 // @author       Moryata
 // @match        https://*.hcaptcha.com/*hcaptcha-challenge*
@@ -103,7 +103,7 @@
 	// This is likely not to happen, if it occurs retry for new images
 	const MAX_SKIPS = 10;
 	var skipCount = 0;
-	var USE_MOBILE_NET = false;
+	var USE_MOBILE_NET = true;
 	var USE_COLOUR_PATTERN = false;
 	var NEW_WORD_IDENTIFIED = false;
 	//Probablility for objects
@@ -286,7 +286,7 @@
 					.then(function(predictions) {
 						var predictionslen = predictions.length;
 						for (var j = 0; j < predictionslen; j++) {
-							var probability = 0.055;
+							var probability = 0.07;
 							if (probabilityForObject.get(predictions[j].className)) {
 								probability = probabilityForObject.get(predictions[j].className);
 							}
@@ -396,7 +396,7 @@
 						clearInterval(trainerInterval);
 						return;
 					}
-				}, 3000);
+				}, 1000);
 			});
 		});
 	}

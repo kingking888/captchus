@@ -477,7 +477,7 @@
             word = ['bus', 'motorbus', 'double decker'];
             USE_MOBILE_NET = true;
         } else if (word == CAR) {
-            word = ['car', 'coupe', 'jeep', 'limo', 'car snow', 'car in snow', 'hatchback', 'cruiser'];
+            word = ['car', 'coupe', 'jeep', 'limo', 'car snow', 'car in snow', 'cruiser', 'sport utility vehicle', 'station wagon', 'hatchback', 'bumper car', 'modelT', 'electric battery'];
             USE_MOBILE_NET = true;
         } else if (word == AIRPLANE) {
             word = ['airplane', 'plane', 'aircraft', 'aeroplane', 'hangar', 'Airdock', 'JumboJet', 'jetliner', 'stealth fighter', 'field artillery', 'jet']

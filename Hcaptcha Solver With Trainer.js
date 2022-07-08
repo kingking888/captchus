@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Hcaptcha Solver Mode Trainer
 // @namespace     Captchus Model H Plus
-// @version      14.6
+// @version      14.7
 // @description  Automatically solves Hcaptcha in browser
 // @author       Moryata
 // @match        https://*.hcaptcha.com/*hcaptcha-challenge*
@@ -339,7 +339,6 @@
 
             data.getBase64(Jimp.AUTO, async function (err, src) {
                 var trainerInterval = setInterval(function(){
-
                     if (!qSelectorAll(IMAGE)[i] || !(qSelectorAll(IMAGE)[i].style.background).includes(imageUrl) ){
                         clearInterval(trainerInterval);
                         return;
@@ -372,7 +371,6 @@
                         console.log("Image Stored into database");
                         clearInterval(trainerInterval);
                         return;
-
                     }
 
                 },3000);
@@ -403,7 +401,6 @@
         }
         return tensorFlowMobileNetModel;
     }
-
 
     //Initialize TesseractWorker
     function initializeTesseractWorker() {
@@ -461,7 +458,6 @@
         return document.querySelector(selector);
     }
 
-
     async function getSynonyms(word) {
 
         USE_MOBILE_NET = true;
@@ -512,9 +508,7 @@
             NEW_WORD_IDENTIFIED = true;
             console.log("Word does not match. New type identified::" + word);
         }
-
         return word
-
     }
 
     function isHidden(el) {
@@ -533,7 +527,7 @@
                 return;
             }
 
-        }, 50);
+        }, 5);
     } else {
 
         try {
@@ -1158,7 +1152,7 @@
             for (let i = 0; i < qSelectorAll(LANGUAGE_SELECTOR).length; i++) {
                 if (qSelectorAll(LANGUAGE_SELECTOR)[i].innerText == DEFAULT_LANGUAGE) {
                     document.querySelectorAll(LANGUAGE_SELECTOR)[i].click();
-                    await delay(100);
+                    await delay(5);
                 }
             }
         }
@@ -1236,7 +1230,6 @@
                 }
             }
             waitUntilImageSelection();
-
         } else {
             waitForImagesToAppear();
         }

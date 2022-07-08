@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Hcaptcha Solver Mode OCR
 // @namespace    Captchus Model H
-// @version       6.9
+// @version       7.0
 // @description  Automatically solves Hcaptcha in browser
 // @author       Moryata
 // @match        https://*.hcaptcha.com/*hcaptcha-challenge*
@@ -20,9 +20,9 @@
 // @connect      https://*.hcaptcha.com/*
 // @require      https://unpkg.com/jimp@0.12.0/browser/lib/jimp.min.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/2.0.0-alpha.2/tesseract.min.js
-// @require      https://cdnjs.cloudflare.com/ajax/libs/tensorflow/3.18.0/tf.min.js
+// @require      https://cdn.jsdelivr.net/npm/@tensorflow/tfjs/dist/tf.min.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/2.1.5/worker.min.js
-// @require      https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd@2.2.2/dist/coco-ssd.min.js
+// @require      https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd
 // @require      https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@2.1.0/dist/mobilenet.min.js
 // ==/UserScript==
 (async function() {
@@ -97,12 +97,12 @@
 	const SENTENCE_TEXT_AN = "Please click each image containing an ";
 	const LANGUAGE_FOR_OCR = "eng";
 	// Enabling this by default
-	let ENABLE_TENSORFLOW = true;
+	const ENABLE_TENSORFLOW = true;
 	// Max Skips that can be done while solving the captcha
 	// This is likely not to happen, if it occurs retry for new images
-	const MAX_SKIPS = 10;
+	const MAX_SKIPS = 25;
 	var skipCount = 0;
-	var USE_MOBILE_NET = true;
+	var USE_MOBILE_NET = false;
 	var USE_COLOUR_PATTERN = false;
 	var NEW_WORD_IDENTIFIED = false;
 	//Probablility for objects
@@ -395,7 +395,7 @@
 						clearInterval(trainerInterval);
 						return;
 					}
-				}, 1000);
+				}, 5000);
 			});
 		});
 	}
@@ -469,7 +469,7 @@
 		return document.querySelector(selector);
 	}
 	async function getSynonyms(word) {
-		USE_MOBILE_NET = true;
+		USE_MOBILE_NET = false;
 		USE_COLOUR_PATTERN = false;
 		NEW_WORD_IDENTIFIED = false;
 		//TODO: Format this to JSON string
@@ -483,19 +483,19 @@
             word = ['airplane', 'plane', 'aircraft', 'aeroplane', 'hangar', 'Airdock', 'JumboJet', 'jetliner', 'stealth fighter', 'field artillery']
             USE_MOBILE_NET = true;
         } else if (word == TRAIN) {
-            word = ['train', 'rail', 'cable car', 'locomotive', 'subway station']
+            word = ['train', 'rail', 'locomotive', 'subway station']
             USE_MOBILE_NET = true;
         } else if (word == BOAT || word == SURFBOARD) {
             word = ['boat', 'barge', 'houseboat', 'boathouse', 'speedboat', 'submarine', 'bobsled', 'catamaran', 'schooner', 'ocean liner', 'lifeboat', 'fireboat', 'yawl', 'pontoon', 'small boat', 'SnowBlower', 'Sea-coast', 'paddlewheel', 'paddle wheel', 'PaddleSteamer', 'Freighter', 'Sternwheeler', 'kayak', 'canoe', 'deck', 'DockingFacility', 'surfboard', 'ship', 'cruise', 'watercraft', 'sail', 'canvas', 'raft']
             USE_MOBILE_NET = true;
         } else if (word == BICYCLE) {
-            word = ['bicycle-built-for-two', 'tandem bicycle', 'bicycle', 'tricycle', 'mountain bike', 'AcceleratorPedal', 'macaw', 'knot']
+            word = ['tandem bicycle', 'bicycle', 'tricycle', 'mountain bike']
             USE_MOBILE_NET = true;
         } else if (word == MOTORCYCLE) {
-            word = ['moped', 'motor scooter', 'scooter', 'motorcycle', 'windshield', 'dashboard']
+            word = ['moped', 'motor scooter', 'scooter', 'motorcycle']
             USE_MOBILE_NET = true;
         } else if (word == TRUCK) {
-            word = ['truck', 'cargocontainer', 'bazooka']
+            word = ['truck', 'cargocontainer']
             USE_MOBILE_NET = true;
         } else if (word == TRIMARAN || word == SPEEDBOAT || word == SEAPLANE) {
             word = ['spatula', 'can opener', 'tin opener', 'monitor', 'screen', 'stretcher', 'printer', 'nail', 'mousetrap', 'TRIMARAN', 'space shuttle', 'ski', 'rotisserie', 'geyser', 'plate rack']

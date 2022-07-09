@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         Hcaptcha Solver
 // @namespace    Captchus Challenger Identfy
-// @version      7.6
-// @description  Automatically solves Hcaptcha in browser
+// @version      7.7
+// @description  Automatically solves Hcaptcha in Browser
 // @author       Moryata
 // @match        https://*.hcaptcha.com/*
 // @grant        GM_xmlhttpRequest
@@ -39,8 +39,8 @@
     const ENABLE_DEFAULT_LANGUAGE = true;
 
     //Guess/Match New Images
-    const MATCH_IMAGES_USING_TRAINER = true;
-    const GUESS_NEW_IMAGE_TYPE = true;
+    const MATCH_IMAGES_USING_TRAINER = false;
+    const GUESS_NEW_IMAGE_TYPE = false;
 
     //Node Selectors
     const CHECK_BOX = "#checkbox";
@@ -419,10 +419,6 @@
     }
 
     async function getSynonyms(word) {
-        //USE_MOBILE_NET = false;
-        //USE_COLOUR_PATTERN = false;
-        //NEW_WORD_IDENTIFIED = false;
-	//TODO: Format this to JSON string
         if (word == MOTORBUS || word == BUS) {
             word = ['bus', 'motorbus', 'double decker'];
             USE_MOBILE_NET = true;

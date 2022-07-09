@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Hcaptcha Solver
 // @namespace    Captchus Challenger Identfy
-// @version      7.5
+// @version      7.6
 // @description  Automatically solves Hcaptcha in browser
 // @author       Moryata
 // @match        https://*.hcaptcha.com/*
@@ -21,7 +21,7 @@
 // @require      https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet
 // ==/UserScript==
 (async function() {
-    //TODO: Enable debug mode to print console logs
+    //TODO: Enable debug mode to print //console logs
     //TODO: Refactor Code for different models
     'use strict';
     var selectedImageCount = 0;
@@ -39,8 +39,8 @@
     const ENABLE_DEFAULT_LANGUAGE = true;
 
     //Guess/Match New Images
-    const MATCH_IMAGES_USING_TRAINER = false;
-    const GUESS_NEW_IMAGE_TYPE = false;
+    const MATCH_IMAGES_USING_TRAINER = true;
+    const GUESS_NEW_IMAGE_TYPE = true;
 
     //Node Selectors
     const CHECK_BOX = "#checkbox";
@@ -111,7 +111,7 @@
     const MAX_SKIPS = 15
     var skipCount = 0;
 
-    var USE_MOBILE_NET = false;
+    var USE_MOBILE_NET = true;
     var USE_COLOUR_PATTERN = false;
     var NEW_WORD_IDENTIFIED = false;
 
@@ -176,14 +176,14 @@
             onerror: function(e) {
                 //Using Fallback TensorFlow
                 if (e && e.status && e.status != 0) {
-                    console.log(e);
-                    console.log("Using Fallback");
+                    //console.log(e);
+                    //console.log("Using Fallback");
                 }
                 matchImagesUsingTensorFlow(imageUrl, word, i);
 
             },
             ontimeout: function() {
-                console.log("Timed out. Using Fallback");
+                //console.log("Timed out. Using Fallback");
                 matchImagesUsingTensorFlow(imageUrl, word, i);
             },
         });
@@ -192,7 +192,7 @@
     function matchImagesUsingTensorFlow(imageUrl, word, i) {
         try {
             let img = new Image();
-            img.crossOrigin = "Anonymous";
+            img.crossOrigin = "anonymous";
             img.src = imageUrl;
             img.onload = () => {
                 initializeTensorFlowModel().then(model => model.detect(img))
@@ -211,13 +211,13 @@
                 });
             }
         } catch (err) {
-            console.log(err.message);
+            //console.log(err.message);
         }
     }
     function matchImagesUsingTensorFlowMobileNet(imageUrl, word, i) {
         try {
             let img = new Image();
-            img.crossOrigin = "Anonymous";
+            img.crossOrigin = "anonymous";
             img.src = imageUrl;
             img.onload = () => {
                 initializeTensorFlowMobilenetModel().then(model => model.classify(img))
@@ -240,7 +240,7 @@
                 });
             }
         } catch (err) {
-            console.log(err.message);
+            //console.log(err.message);
         }
     }
     // TODO: Generalize this logic
@@ -314,7 +314,7 @@
                     }
                     if (qSelectorAll(IMAGE)[i] && (qSelectorAll(IMAGE)[i].style.background).includes(imageUrl) &&
                         qSelectorAll(TASK_IMAGE_BORDER)[i].style.opacity == 0 && GM_getValue(src) && GM_getValue(src) == word) {
-                        console.log("Retrieved image from trainer");
+                        //console.log("Retrieved image from trainer");
                         selectedImageCount = selectedImageCount + 1;
                         qSelectorAll(TASK_IMAGE)[i].click();
                         clearInterval(trainerInterval);
@@ -324,10 +324,10 @@
                     // Overriding Previously Stored values
                     if (qSelectorAll(IMAGE)[i] && (qSelectorAll(IMAGE)[i].style.background).includes(imageUrl) &&
                         qSelectorAll(TASK_IMAGE_BORDER)[i].style.opacity == 1 && GM_getValue(src) && GM_getValue(src) != word) {
-                        console.log("Overriding image in the trainer");
+                        //console.log("Overriding image in the trainer");
                         selectedImageCount = selectedImageCount + 1;
                         GM_setValue(src,word);
-                        console.log("Image Stored into database");
+                        //console.log("Image Stored into database");
                         clearInterval(trainerInterval);
                         return;
                     }
@@ -335,11 +335,11 @@
                         qSelectorAll(TASK_IMAGE_BORDER)[i].style.opacity == 1 && !GM_getValue(src)) {
                         selectedImageCount = selectedImageCount + 1;
                         GM_setValue(src,word);
-                        console.log("Image Stored into database");
+                        //console.log("Image Stored into database");
                         clearInterval(trainerInterval);
                         return;
                     }
-                },5000);
+                },1500);
 
             });
         });
@@ -397,18 +397,16 @@
                 } else {
                     //No Match found
                 }
-
                 selectedImageCount = selectedImageCount + 1;
-
             } else {
-                console.log("Using Fallback TensorFlow");
+                //console.log("Using Fallback TensorFlow");
                 matchImagesUsingTensorFlow(imageUrl, word, i);
             }
 
         } catch (err) {
             //Using Fallback TensorFlow
-            console.log(err.message);
-            console.log("Using Fallback TensorFlow");
+            //console.log(err.message);
+            //console.log("Using Fallback TensorFlow");
             matchImagesUsingTensorFlow(imageUrl, word, i);
         }
     }
@@ -421,10 +419,10 @@
     }
 
     async function getSynonyms(word) {
-        USE_MOBILE_NET = true;
-        USE_COLOUR_PATTERN = false;
-        NEW_WORD_IDENTIFIED = true;
-		    //TODO: Format this to JSON string
+        //USE_MOBILE_NET = false;
+        //USE_COLOUR_PATTERN = false;
+        //NEW_WORD_IDENTIFIED = false;
+	//TODO: Format this to JSON string
         if (word == MOTORBUS || word == BUS) {
             word = ['bus', 'motorbus', 'double decker'];
             USE_MOBILE_NET = true;
@@ -456,17 +454,19 @@
             word = ['bed', 'couch', 'chair', 'potted plant', 'dining table', 'clock', 'tv', 'book']
         } else if (word == ZEBRA) {
             word = ['zebra']
+            USE_MOBILE_NET = true;
         } else if (word == CAT) {
             word = ['cat']
             USE_MOBILE_NET = true;
         } else if (word == DOG) {
             word = ['dog']
+            USE_MOBILE_NET = true;
         } else if (word == VALLEY || word == VERTICAL_RIVER){
             word = ['alp','volcano']
-            USE_COLOUR_PATTERN = false;
+            USE_COLOUR_PATTERN = true;
         } else {
             NEW_WORD_IDENTIFIED = true;
-            console.log("Word does not match. New type identified:: " + word);
+            //console.log("Word does not match. New type identified:: " + word);
         }
 		return word
     }
@@ -493,8 +493,8 @@
             selectImages();
 
         } catch (err) {
-            console.log(err);
-            console.log("Tesseract could not be initialized");
+            //console.log(err);
+            //console.log("Tesseract could not be initialized");
         }
     }
 
@@ -551,7 +551,7 @@
                 var urlString = qSelectorAll(IMAGE)[i].style.background;
                 var imageUrl = getUrlFromString(urlString);
                 if (imageUrl == 0) {
-                    console.log("Image url is empty");
+                    ////console.log("Image url is empty");
                     return imageList;
                 }
                 imageList[i] = imageUrl;
@@ -568,7 +568,7 @@
                 clearInterval(imageInterval);
                 if (qSelector(SUBMIT_BUTTON)) {
                     qSelector(SUBMIT_BUTTON).click();
-                  console.log("Verify");
+                    console.log("Verify");
                 }
                 return selectImagesAfterDelay(5);
             } else if (imageIntervalCount > 8) {
@@ -587,9 +587,8 @@
                 }
                 return selectImagesAfterDelay(5);
             }else{
-
             }
-        }, 1000);
+        }, 1);
     }
 
     function waitForImagesToAppear() {
@@ -612,7 +611,7 @@
                     var targetNode = Array.from(qSelectorAll('div'))
                     .find(el => el.textContent === targetNodeList[j]);
                     if (targetNode) {
-                        console.log("Target Node Found");
+                        //console.log("Target Node Found");
                         clearInterval(waitForImagesInterval);
                         return unsure(targetNodeList[j]);
                     }
@@ -739,7 +738,7 @@
     // Using Tesseract to recognize images
     function imageUsingOCR() {
         try {
-            console.log("Image using OCR");
+            //console.log("Image using OCR");
             var urlString = qSelector(IMAGE_FOR_OCR).style.background;
             var imageUrl = getUrlFromString(urlString);
             if (imageUrl == 0) {
@@ -753,7 +752,7 @@
                     preProcessImage(base64Image, imageUrl);
                 })});
         } catch (err) {
-            console.log(err.message);
+            //console.log(err.message);
             return selectImagesAfterDelay(1);
         }
     }
@@ -778,7 +777,7 @@
         var text = "";
         await worker.recognize(img, LANGUAGE_FOR_OCR).then(function(data) {
             text = data.text;
-            // console.log("Recognized Text::" + text);
+            // //console.log("Recognized Text::" + text);
         });
         return text.trim();
     }
@@ -791,7 +790,7 @@
                 var urlString = qSelectorAll(CHALLENGE_IMAGE)[i].style.background;
                 var imageUrl = getUrlFromString(urlString);
                 if (imageUrl == 0) {
-                    console.log("Image url is empty, Retrying...");
+                    //console.log("Image url is empty, Retrying...");
                     return true;
                 }
                 currentExampleUrls[i] = imageUrl;
@@ -835,7 +834,7 @@
                     })
                 }
             } catch (e) {
-                console.log(e);
+                //console.log(e);
             }
         }
     }
@@ -850,7 +849,6 @@
                 img.onload = () => {
                     initializeTensorFlowMobilenetModel().then(model => model.classify(img))
                         .then(function(predictions) {
-
                         let predictionslen = predictions.length;
                         let hashSet = new Set();
                         for (let j = 0; j < predictionslen; j++) {
@@ -873,7 +871,7 @@
                     })
                 }
             } catch (e) {
-                console.log(e);
+                //console.log(e);
             }
         }
     }
@@ -903,7 +901,7 @@
     function inputChallenge(data, imageUrl) {
         try {
             if ((qSelector(IMAGE_FOR_OCR).style.background).includes(imageUrl)) {
-                console.log(data.text);
+                //console.log(data.text);
                 var targetNode = qSelector(CHALLENGE_INPUT_FIELD);
                 targetNode.value = data.text.replaceAll("\n", "");
                 var challengeInput = qSelector(CHALLENGE_INPUT);
@@ -913,7 +911,7 @@
             }
 
         } catch (err) {
-            console.log(err.message);
+            //console.log(err.message);
         }
     }
 
@@ -999,8 +997,7 @@
                     return word;
                 } else {
                     //Using OCR on Text for accurate result
-                    console.log("New word or different cyrillic");
-
+                    //console.log("New word or different cyrillic");
                     word = await sanitizeWord(word);
                     console.log(word);
                     word = word.replace(SENTENCE_TEXT_A, '');
@@ -1029,7 +1026,7 @@
             }
 
         } catch (e) {
-            console.log(e);
+            //console.log(e);
         }
 
         return word;
@@ -1040,7 +1037,7 @@
             for (let i = 0; i < qSelectorAll(LANGUAGE_SELECTOR).length; i++) {
                 if (qSelectorAll(LANGUAGE_SELECTOR)[i].innerText == DEFAULT_LANGUAGE) {
                     document.querySelectorAll(LANGUAGE_SELECTOR)[i].click();
-                    await delay(1);
+                    await delay(5);
                 }
             }
         }
@@ -1049,15 +1046,12 @@
             await initializeTensorFlowMobilenetModel();
             selectedImageCount = 0;
             try {
-
                 if (isObjectChanged()) {
                     prevWord = await identifyWord();
                 }
-
                 var word = prevWord;
-
                 if (word == -1 && skipCount >= MAX_SKIPS) {
-                    console.log("Max Retries Attempted. Captcha cannot be solved");
+                    //console.log("Max Retries Attempted. Captcha cannot be solved");
                     return;
                 } else if (word == -1 && skipCount < MAX_SKIPS) {
                     skipCount++;
@@ -1068,12 +1062,12 @@
                 } else {
                     //Get Synonyms for the word
                     word = await getSynonyms(word);
-                    console.log("words are::" + word);
+                    //console.log("words are::" + word);
                 }
 
 
             } catch (err) {
-                console.log(err.message);
+                //console.log(err.message);
                 return selectImagesAfterDelay(5);
             }
 
@@ -1081,7 +1075,7 @@
             try {
                 imageList = getImageList();
                 if (imageList.length != 9) {
-                    console.log("Waiting");
+                    //console.log("Waiting");
                     // Image containers are visible but there are no urls in the image
                     // Skip the image
                     if (qSelector(SUBMIT_BUTTON)) {
@@ -1090,7 +1084,7 @@
                     return selectImagesAfterDelay(5);
                 }
             } catch (err) {
-                console.log(err.message);
+                //console.log(err.message);
                 return selectImagesAfterDelay(5);
             }
 
@@ -1118,7 +1112,6 @@
                 }
             }
             waitUntilImageSelection();
-
         } else {
             waitForImagesToAppear();
         }

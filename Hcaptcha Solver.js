@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Hcaptcha Solver
 // @namespace    Captchus Challenger Identfy
-// @version      7.2
+// @version      7.3
 // @description  Automatically solves Hcaptcha in browser
 // @author       Moryata
 // @match        https://*.hcaptcha.com/*hcaptcha-challenge*
@@ -284,7 +284,7 @@
 					.then(function(predictions) {
 						var predictionslen = predictions.length;
 						for (var j = 0; j < predictionslen; j++) {
-							var probability = 0.055;
+							var probability = 0.099;
 							if (probabilityForObject.get(predictions[j].className)) {
 								probability = probabilityForObject.get(predictions[j].className);
 							}
@@ -554,7 +554,7 @@
 	function selectImagesAfterDelay(delay) {
 		setTimeout(function() {
 			selectImages();
-		}, delay * 1250);
+		}, delay * 1000);
 	}
 
 	function triggerEvent(el, type) {
@@ -709,7 +709,7 @@
 			}]).contrast(3).color([{
 				apply: 'brighten',
 				params: [25]
-			}]).contrast(1).greyscale().getBase64(Jimp.AUTO, function(err, src) {
+			}]).contrast(5).greyscale().getBase64(Jimp.AUTO, function(err, src) {
 				var img = document.createElement("img");
 				img.setAttribute("src", src);
 				worker.recognize(img, LANGUAGE_FOR_OCR).then(function(data) {
@@ -729,7 +729,7 @@
 	function preProcessImageMethod3(base64Image, imageUrl) {
 		//Multi Contrast only brighten
 		Jimp.read(base64Image).then(function(data) {
-			data.contrast(1).color([{
+			data.contrast(5).color([{
 					apply: 'brighten',
 					params: [25]
 				}])
@@ -756,7 +756,7 @@
 		//Resize the image
 		Jimp.read(base64Image).then(function(data) {
 			data.resize(256, Jimp.AUTO)
-				.quality(70) // set JPEG quality
+				.quality(75) // set JPEG quality
 				.greyscale() // set greyscale
 				.getBase64(Jimp.AUTO, function(err, src) {
 					var img = document.createElement("img");

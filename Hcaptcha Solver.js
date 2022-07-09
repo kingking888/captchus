@@ -39,7 +39,7 @@
     const ENABLE_DEFAULT_LANGUAGE = true;
 
     //Guess/Match New Images
-    const MATCH_IMAGES_USING_TRAINER = true;
+    const MATCH_IMAGES_USING_TRAINER = false;
     const GUESS_NEW_IMAGE_TYPE = false;
 
     //Node Selectors
@@ -224,7 +224,7 @@
                     .then(function(predictions) {
                     var predictionslen = predictions.length;
                     for (var j = 0; j < predictionslen; j++) {
-                        var probability = 0.055;
+                        var probability = 0.1;
                         if (probabilityForObject.get(predictions[j].className)) {
                             probability = probabilityForObject.get(predictions[j].className);
                         }
@@ -423,7 +423,7 @@
     async function getSynonyms(word) {
         USE_MOBILE_NET = true;
         USE_COLOUR_PATTERN = false;
-        NEW_WORD_IDENTIFIED = false;
+        NEW_WORD_IDENTIFIED = true;
 		    //TODO: Format this to JSON string
         if (word == MOTORBUS || word == BUS) {
             word = ['bus', 'motorbus', 'double decker'];
@@ -466,7 +466,7 @@
             USE_COLOUR_PATTERN = false;
         } else {
             NEW_WORD_IDENTIFIED = true;
-            console.log("Word does not match. New type identified::" + word);
+            console.log("Word does not match. New type identified:: " + word);
         }
 		return word
     }
@@ -689,7 +689,7 @@
     function preProcessImageMethod3(base64Image, imageUrl) {
         //Multi Contrast only brighten
         Jimp.read(base64Image).then(function(data) {
-            data.contrast(5).color([{apply: 'brighten',params: [20]}])
+            data.contrast(1).color([{apply: 'brighten',params: [20]}])
                 .contrast(1)
                 .greyscale()
                 .getBase64(Jimp.AUTO, function(err, src) {
@@ -713,7 +713,7 @@
         //Resize the image
         Jimp.read(base64Image).then(function(data) {
             data.resize(256, Jimp.AUTO)
-                .quality(75) // set JPEG quality
+                .quality(80) // set JPEG quality
                 .greyscale() // set greyscale
                 .getBase64(Jimp.AUTO, function(err, src) {
                 var img = document.createElement("img");
@@ -797,7 +797,6 @@
                 currentExampleUrls[i] = imageUrl;
             }
         }
-
         if (prevExampleUrls.length != currentExampleUrls.length) {
             return true;
         }
@@ -808,7 +807,6 @@
                 return true;
             }
         }
-
         return false;
     }
 
@@ -844,7 +842,6 @@
 
     async function identifyObjectsFromImagesUsingMobileNet(imageUrlList) {
         identifiedObjectsList = [];
-
         for (let i = 0; i < imageUrlList.length; i++) {
             try {
                 let img = new Image();
@@ -882,7 +879,6 @@
     }
 
     async function getWordFromIdentifiedObjects(identifiedObjectsList) {
-
         var hashMap = new Map();
         for (var i = 0; i < identifiedObjectsList.length; i++) {
             if (hashMap.has(identifiedObjectsList[i])) {
@@ -1038,11 +1034,8 @@
 
         return word;
     }
-
     var prevWord = "";
-
     async function selectImages() {
-
         if (ENABLE_DEFAULT_LANGUAGE) {
             for (let i = 0; i < qSelectorAll(LANGUAGE_SELECTOR).length; i++) {
                 if (qSelectorAll(LANGUAGE_SELECTOR)[i].innerText == DEFAULT_LANGUAGE) {

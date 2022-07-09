@@ -1,14 +1,10 @@
 // ==UserScript==
 // @name         Hcaptcha Solver
 // @namespace    Captchus Challenger Identfy
-// @version      7.4
+// @version      7.5
 // @description  Automatically solves Hcaptcha in browser
 // @author       Moryata
-// @match        https://*.hcaptcha.com/*hcaptcha-challenge*
-// @match        https://*.hcaptcha.com/*checkbox*
-// @match        https://*.hcaptcha.com/*captcha*
-// @match        https://newassets.hcaptcha.com/*
-// @match        https://*.hcaptcha.com/*hcaptcha*
+// @match        https://*.hcaptcha.com/*
 // @grant        GM_xmlhttpRequest
 // @grant        GM_setValue
 // @grant        GM_getValue
@@ -130,9 +126,7 @@
     probabilityForObject.set("rotisserie", 0.02);
     probabilityForObject.set("spatula", 0.05);
 
-
     String.prototype.includesOneOf = function(arrayOfStrings) {
-
         //If this is not an Array, compare it as a String
         if (!Array.isArray(arrayOfStrings)) {
             return this.toLowerCase().includes(arrayOfStrings.toLowerCase());
@@ -148,7 +142,6 @@
     }
 
     String.prototype.equalsOneOf = function(arrayOfStrings) {
-
         //If this is not an Array, compare it as a String
         if (!Array.isArray(arrayOfStrings)) {
             return this.toLowerCase() == arrayOfStrings.toLowerCase();
@@ -169,7 +162,6 @@
     // Using TensorFlow as fallback, but this requires good CPU in order to solve quickly.
     // CPU utilization and memory utlization may go high when using TensorFlow.js
     function matchImages(imageUrl, word, i) {
-
         GM_xmlhttpRequest({
             method: "POST",
             url: "https://www.imageidentify.com/objects/user-26a7681f-4b48-4f71-8f9f-93030898d70d/prd/urlapi/",
@@ -177,7 +169,7 @@
                 "Content-Type": "application/x-www-form-urlencoded"
             },
             data: "image=" + encodeURIComponent(imageUrl),
-            timeout: 8000,
+            timeout: 7000,
             onload: function(response) {
                 clickImages(response, imageUrl, word, i)
             },
@@ -195,7 +187,6 @@
                 matchImagesUsingTensorFlow(imageUrl, word, i);
             },
         });
-
     }
 
     function matchImagesUsingTensorFlow(imageUrl, word, i) {
@@ -223,10 +214,7 @@
             console.log(err.message);
         }
     }
-
-
     function matchImagesUsingTensorFlowMobileNet(imageUrl, word, i) {
-
         try {
             let img = new Image();
             img.crossOrigin = "Anonymous";
@@ -236,11 +224,10 @@
                     .then(function(predictions) {
                     var predictionslen = predictions.length;
                     for (var j = 0; j < predictionslen; j++) {
-                        var probability = 0.075;
+                        var probability = 0.055;
                         if (probabilityForObject.get(predictions[j].className)) {
                             probability = probabilityForObject.get(predictions[j].className);
                         }
-
                         if (qSelectorAll(IMAGE)[i] && (qSelectorAll(IMAGE)[i].style.background).includes(imageUrl) &&
                             qSelectorAll(TASK_IMAGE_BORDER)[i].style.opacity == 0 &&
                             predictions[j].className.includesOneOf(word) && predictions[j].probability > probability) {
@@ -256,17 +243,13 @@
             console.log(err.message);
         }
     }
-
-
     // TODO: Generalize this logic
     // Identifying this based on the observation of the images seen
     // The actual way would be to scan the entire image to find the lake.
     // Mobilenet model in browser js identifies the lake but does not provide coordinates
     // to identify if it is horizontal or vertical
     function matchImageForVerticalRiver(imageUrl, word, i) {
-
         Jimp.read(imageUrl).then(function (data) {
-
             data.getBase64(Jimp.AUTO, async function (err, src) {
                 var img = document.createElement("img");
                 img.setAttribute("src", src);
@@ -276,21 +259,17 @@
                 var cropHeight = imageHeight - 0.03*imageHeight;
                 let url = src.replace(/^data:image\/\w+;base64,/, "");
                 let buffer = new Buffer(url, 'base64');
-
                 Jimp.read(buffer).then(function (data) {
                     data.crop(0, cropHeight, imageWidth, imageHeight)
                         .getBase64(Jimp.AUTO, async function (err, src) {
-
                         var img = document.createElement("img");
                         img.src = src;
                         await img.decode();
-
                         var c = document.createElement("canvas")
                         c.width = img.width;
                         c.height = img.height;
                         var ctx = c.getContext("2d");
                         ctx.drawImage(img, 0, 0);
-
                         var imageData = ctx.getImageData(0, 0, c.width, c.height);
                         var data = imageData.data;
                         var count = 0;
@@ -319,8 +298,6 @@
             });
         });
     }
-
-
     // This approach is naive approch to store the images and retrieve
     // The accuracy is 100% as long as you store the selected images
     // Browser memory is used to store the images and gets cleared if you delete the browser cache and cookies
@@ -328,17 +305,13 @@
     // This approach is only used during urgent scenarios before training the images
     // Image differnce can also be done with the stored images to identify new image based on the existing if they are nearly equal
     function matchImagesUsingTrainer(imageUrl, word, i) {
-
         Jimp.read(imageUrl).then(function (data) {
-
             data.getBase64(Jimp.AUTO, async function (err, src) {
                 var trainerInterval = setInterval(function(){
-
                     if (!qSelectorAll(IMAGE)[i] || !(qSelectorAll(IMAGE)[i].style.background).includes(imageUrl) ){
                         clearInterval(trainerInterval);
                         return;
                     }
-
                     if (qSelectorAll(IMAGE)[i] && (qSelectorAll(IMAGE)[i].style.background).includes(imageUrl) &&
                         qSelectorAll(TASK_IMAGE_BORDER)[i].style.opacity == 0 && GM_getValue(src) && GM_getValue(src) == word) {
                         console.log("Retrieved image from trainer");
@@ -358,7 +331,6 @@
                         clearInterval(trainerInterval);
                         return;
                     }
-
                     if (qSelectorAll(IMAGE)[i] && (qSelectorAll(IMAGE)[i].style.background).includes(imageUrl) &&
                         qSelectorAll(TASK_IMAGE_BORDER)[i].style.opacity == 1 && !GM_getValue(src)) {
                         selectedImageCount = selectedImageCount + 1;
@@ -366,15 +338,12 @@
                         console.log("Image Stored into database");
                         clearInterval(trainerInterval);
                         return;
-
                     }
-
                 },5000);
 
             });
         });
     }
-
 
     //Function to sleep or delay
     async function delay(ms) {
@@ -398,7 +367,6 @@
         return tensorFlowMobileNetModel;
     }
 
-
     //Initialize TesseractWorker
     function initializeTesseractWorker() {
         if (!worker) {
@@ -407,7 +375,6 @@
     }
 
     function clickImages(response, imageUrl, word, i) {
-
         try {
             if (response && response.responseText && (qSelectorAll(IMAGE)[i].style.background).includes(imageUrl) &&
                 qSelectorAll(TASK_IMAGE_BORDER)[i].style.opacity == 0) {
@@ -419,7 +386,6 @@
                 } else if (responseJson.identify && responseJson.identify.alternatives) {
                     var alternatives = JSON.stringify(responseJson.identify.alternatives);
                     var alternativesJson = JSON.parse(alternatives);
-
                     for (var key in alternativesJson) {
                         if (alternativesJson.hasOwnProperty(key)) {
                             if ((alternativesJson[key].includesOneOf(word) || key.includesOneOf(word))) {
@@ -446,7 +412,6 @@
             matchImagesUsingTensorFlow(imageUrl, word, i);
         }
     }
-
     function qSelectorAll(selector) {
         return document.querySelectorAll(selector);
     }
@@ -456,11 +421,9 @@
     }
 
     async function getSynonyms(word) {
-
-        USE_MOBILE_NET = false;
+        USE_MOBILE_NET = true;
         USE_COLOUR_PATTERN = false;
         NEW_WORD_IDENTIFIED = false;
-
 		    //TODO: Format this to JSON string
         if (word == MOTORBUS || word == BUS) {
             word = ['bus', 'motorbus', 'double decker'];
@@ -605,6 +568,7 @@
                 clearInterval(imageInterval);
                 if (qSelector(SUBMIT_BUTTON)) {
                     qSelector(SUBMIT_BUTTON).click();
+                  console.log("Verify");
                 }
                 return selectImagesAfterDelay(5);
             } else if (imageIntervalCount > 8) {
@@ -625,7 +589,7 @@
             }else{
 
             }
-        }, 3);
+        }, 1000);
     }
 
     function waitForImagesToAppear() {
@@ -664,12 +628,12 @@
             data.color([
                 {
                     apply: 'darken',
-                    params: [20]
+                    params: [25]
                 }
             ]).color([
                 {
                     apply: 'brighten',
-                    params: [20]
+                    params: [25]
                 }
             ])
                 .greyscale()
@@ -696,23 +660,18 @@
         //Multi Contrast darken and brighten
         Jimp.read(base64Image).then(function(data) {
             data.color([
-
                 {
                     apply: 'darken',
-                    params: [20]
+                    params: [25]
                 }
-
             ]).contrast(1).color([
-
                 {
                     apply: 'brighten',
-                    params: [20]
+                    params: [25]
                 }
-
             ]).contrast(1).greyscale().getBase64(Jimp.AUTO, function(err, src) {
                 var img = document.createElement("img");
                 img.setAttribute("src", src);
-
                 worker.recognize(img, LANGUAGE_FOR_OCR).then(function(data) {
                     //Remove Image After recognizing
                     img.removeAttribute("src");
@@ -730,7 +689,7 @@
     function preProcessImageMethod3(base64Image, imageUrl) {
         //Multi Contrast only brighten
         Jimp.read(base64Image).then(function(data) {
-            data.contrast(1).color([{apply: 'brighten',params: [20]}])
+            data.contrast(5).color([{apply: 'brighten',params: [20]}])
                 .contrast(1)
                 .greyscale()
                 .getBase64(Jimp.AUTO, function(err, src) {
@@ -754,7 +713,7 @@
         //Resize the image
         Jimp.read(base64Image).then(function(data) {
             data.resize(256, Jimp.AUTO)
-                .quality(60) // set JPEG quality
+                .quality(75) // set JPEG quality
                 .greyscale() // set greyscale
                 .getBase64(Jimp.AUTO, function(err, src) {
                 var img = document.createElement("img");
@@ -814,9 +773,7 @@
     }
 
     async function convertImageToText(img) {
-
         await initializeTesseractWorker();
-
         //Convert Image to Text
         var text = "";
         await worker.recognize(img, LANGUAGE_FOR_OCR).then(function(data) {
@@ -857,7 +814,6 @@
 
     async function identifyObjectsFromImages(imageUrlList) {
         identifiedObjectsList = [];
-
         for (let i = 0; i < imageUrlList.length; i++) {
             try {
                 let img = new Image();
@@ -1015,7 +971,7 @@
 
     async function sanitizeWord(word){
         var chars =[];
-        var alphabets = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        var alphabets = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789,@!*+";
         var answerChars = [];
         for(let i=0;i<word.length;i++){
             var tempCharImg = await convertTextToImage(word.charAt(i));

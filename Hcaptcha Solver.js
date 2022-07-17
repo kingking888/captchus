@@ -342,7 +342,7 @@
                         clearInterval(trainerInterval);
                         return;
                     }
-                },1000);
+                },3000);
 
             });
         });

@@ -536,7 +536,7 @@
 
     async function getSynonyms(word) {
 
-        USE_MOBILE_NET = true;
+        //USE_MOBILE_NET = true;
         //USE_COLOUR_PATTERN = false;
         //NEW_WORD_IDENTIFIED = false;
 
@@ -622,14 +622,14 @@
 
         //try { await initializeTesseractWorker(); } catch (err) { console.log(err); console.log("Tesseract could not be initialized"); }
 
-        // try { await initializeTensorFlowModel(); } catch (err) { console.log(err); console.log("TF could not be initialized"); }
+        try { await initializeTensorFlowModel(); } catch (err) { console.log(err); console.log("TF could not be initialized"); }
 
-        //try { await initializeTensorFlowMobilenetModel(); } catch (err) { console.log(err); console.log("MobileNet could not be initialized"); }
+        try { await initializeTensorFlowMobilenetModel(); } catch (err) { console.log(err); console.log("MobileNet could not be initialized"); }
 
         try {
             selectImages();
         } catch (err) {
-            console.log(err);
+            //console.log(err);
             console.log("selectImages error");
         }
     }
@@ -709,6 +709,7 @@
 
                 if (qSelector(SUBMIT_BUTTON)) {
                     qSelector(SUBMIT_BUTTON).click();
+                  console.log("Verify");
                 }
                 return selectImagesAfterDelay(5);
             } else if (imageIntervalCount > 8) {
@@ -951,7 +952,7 @@
         var text = "";
         await worker.recognize(img, LANGUAGE_FOR_OCR).then(function(data) {
             text = data.text;
-            // console.log("Recognized Text::" + text);
+            console.log("Recognized Text::" + text);
         });
         return text.trim();
     }
@@ -1062,7 +1063,7 @@
                         })
                 }
             } catch (e) {
-                console.log(e);
+                //console.log(e);
             }
 
         }
@@ -1208,7 +1209,7 @@
             }
 
         } catch (e) {
-            console.log(e);
+            //console.log(e);
         }
 
         return word;

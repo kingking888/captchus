@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Hcaptcha Solver
 // @namespace    Captchus Challenger Identfy
-// @version      7.8
+// @version      7.9
 // @description  Automatically solves Hcaptcha in Browser
 // @author       Moryata
 // @match        https://*.hcaptcha.com/*
@@ -39,7 +39,7 @@
     const ENABLE_DEFAULT_LANGUAGE = true;
 
     //Guess/Match New Images
-    const MATCH_IMAGES_USING_TRAINER = false;
+    const MATCH_IMAGES_USING_TRAINER = true;
     const GUESS_NEW_IMAGE_TYPE = false;
 
     //Node Selectors
@@ -113,7 +113,7 @@
 
     var USE_MOBILE_NET = false;
     var USE_COLOUR_PATTERN = false;
-    var NEW_WORD_IDENTIFIED = true;
+    var NEW_WORD_IDENTIFIED = false;
 
     //Probablility for objects
     var probabilityForObject = new Map();

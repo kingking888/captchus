@@ -30,7 +30,7 @@
     var worker = undefined;
     var identifiedObjectsList = [];
     var exampleImageList = [];
-    var identifyObjectsFromImagesCompleted = false;
+    var identifyObjectsFromImagesCompleted = true;
     var currentExampleUrls = [];
 
     //Default Language for hcaptcha
@@ -114,7 +114,7 @@
     const MAX_SKIPS = 15
     var skipCount = 0;
 
-    var USE_MOBILE_NET = false;
+    var USE_MOBILE_NET = true;
     var USE_COLOUR_PATTERN = false;
     var NEW_WORD_IDENTIFIED = false;
 
@@ -227,7 +227,7 @@
                     .then(function(predictions) {
                     var predictionslen = predictions.length;
                     for (var j = 0; j < predictionslen; j++) {
-                        var probability = 0.070;
+                        var probability = 0.050;
                         if (probabilityForObject.get(predictions[j].className)) {
                             probability = probabilityForObject.get(predictions[j].className);
                         }
@@ -342,7 +342,7 @@
                         clearInterval(trainerInterval);
                         return;
                     }
-                },3000);
+                },1500);
 
             });
         });
@@ -1072,7 +1072,10 @@
                     word = await getSynonyms(word);
                     USE_MOBILE_NET = true;
                     console.log("katanya: " + word);
+                    
                 }
+
+
             } catch (err) {
                 console.log(err.message);
                 return selectImagesAfterDelay(5);

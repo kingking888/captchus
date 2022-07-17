@@ -89,7 +89,7 @@
 
     //Animals
     const ZEBRA = "zebra";
-    const CAT = "cat";
+    const DOMESTICCAT = "domesticcat";
     const DOG = "dog";
     const LION = "lion";
 
@@ -99,7 +99,7 @@
 
     const LIVING_ROOM_TYPES = [BOOK, CHAIR, CLOCK, COUCH, DINING_TABLE, POTTED_PLANT, TV];
     const TRANSPORT_TYPES = [AIRPLANE, BICYCLE, BOAT, BUS, CAR, MOTORBUS, MOTORCYCLE, SEAPLANE, SPEEDBOAT, SURFBOARD, TRAIN, TRIMARAN, TRUCK];
-    const ANIMAL_TYPES = [ZEBRA, CAT, DOG];
+    const ANIMAL_TYPES = [ZEBRA, DOMESTICCAT, DOG, LION];
 
     const SENTENCE_TEXT_A = "Please click each image containing a ";
     const SENTENCE_TEXT_AN = "Please click each image containing an ";
@@ -454,7 +454,7 @@
         } else if (word == ZEBRA) {
             word = ['zebra']
             USE_MOBILE_NET = true;
-        } else if (word == CAT) {
+        } else if (word == DOMESTICCAT) {
             word = ['cat','domesticcat']
             USE_MOBILE_NET = true;
         } else if (word == LION) {
@@ -1070,10 +1070,9 @@
                 } else {
                     //Get Synonyms for the word
                     word = await getSynonyms(word);
-                    console.log("katanya adalah: " + word);
+                    USE_MOBILE_NET = true;
+                    console.log("katanya: " + word);
                 }
-
-
             } catch (err) {
                 console.log(err.message);
                 return selectImagesAfterDelay(5);
@@ -1083,7 +1082,7 @@
             try {
                 imageList = getImageList();
                 if (imageList.length != 9) {
-                    console.log("Waiting");
+                    console.log("Waiting..");
                     // Image containers are visible but there are no urls in the image
                     // Skip the image
                     if (qSelector(SUBMIT_BUTTON)) {

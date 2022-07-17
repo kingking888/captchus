@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Hcaptcha Solver
 // @namespace    Captchus Challenger Identfy
-// @version      7.9
+// @version      8.0
 // @description  Automatically solves Hcaptcha in Browser
 // @author       Moryata
 // @match        https://*.hcaptcha.com/*
@@ -65,6 +65,7 @@
     const BICYCLE = "bicycle";
     const BOAT = "boat";
     const BUS = "bus";
+    const BRIDGE = "bridge";
     const CAR = "car";
     const MOTORBUS = "motorbus";
     const MOTORCYCLE = "motorcycle";
@@ -77,6 +78,7 @@
 
     //Living Room Objects
     const BED = "bed";
+    const BEDROOM = "bedroom";
     const BOOK = "book";
     const CHAIR = "chair";
     const CLOCK = "clock";
@@ -89,12 +91,13 @@
     const ZEBRA = "zebra";
     const CAT = "cat";
     const DOG = "dog";
+    const LION = "lion";
 
     // Vertical River
     const VALLEY = "valley";
     const VERTICAL_RIVER = "vertical river";
 
-    const LIVING_ROOM_TYPES = [BED, BOOK, CHAIR, CLOCK, COUCH, DINING_TABLE, POTTED_PLANT, TV];
+    const LIVING_ROOM_TYPES = [BOOK, CHAIR, CLOCK, COUCH, DINING_TABLE, POTTED_PLANT, TV];
     const TRANSPORT_TYPES = [AIRPLANE, BICYCLE, BOAT, BUS, CAR, MOTORBUS, MOTORCYCLE, SEAPLANE, SPEEDBOAT, SURFBOARD, TRAIN, TRIMARAN, TRUCK];
     const ANIMAL_TYPES = [ZEBRA, CAT, DOG];
 
@@ -447,12 +450,21 @@
             word = ['plane small', 'spatula', 'can opener', 'tin opener', 'monitor', 'screen', 'stretcher', 'printer', 'nail', 'mousetrap', 'TRIMARAN', 'space shuttle', 'ski', 'rotisserie', 'geyser', 'plate rack','seaplane', 'maldives plane', 'twin otter']
             USE_MOBILE_NET = true;
         } else if (word.includesOneOf(LIVING_ROOM_TYPES)) {
-            word = ['bed', 'couch', 'chair', 'potted plant', 'dining table', 'clock', 'tv', 'book']
+            word = ['couch', 'chair', 'potted plant', 'dining table', 'clock', 'tv', 'book']
         } else if (word == ZEBRA) {
             word = ['zebra']
             USE_MOBILE_NET = true;
         } else if (word == CAT) {
-            word = ['cat']
+            word = ['cat','domesticcat']
+            USE_MOBILE_NET = true;
+        } else if (word == LION) {
+            word = ['lion']
+            USE_MOBILE_NET = true;
+        } else if (word == BEDROOM) {
+            word = ['bedroom', 'hotel room']
+            USE_MOBILE_NET = true;
+        } else if (word == BRIDGE) {
+            word = ['bridge', 'jembatan']
             USE_MOBILE_NET = true;
         } else if (word == DOG) {
             word = ['dog']
@@ -1058,7 +1070,7 @@
                 } else {
                     //Get Synonyms for the word
                     word = await getSynonyms(word);
-                    console.log("words are::" + word);
+                    console.log("katanya adalah: " + word);
                 }
 
 

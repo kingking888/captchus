@@ -100,10 +100,8 @@
     const VALLEY = "valley";
     const VERTICAL_RIVER = "vertical river";
 
-    const KNOWN_WORDS = [
-        AIRPLANE, BICYCLE, BOAT, BUS, CAR, MOTORBUS, MOTORCYCLE, SEAPLANE, SPEEDBOAT, SURFBOARD, TRAIN, TRIMARAN, TRUCK,
-        BEDROOM, COUCH, BRIDGE
-    ];
+    const KNOWN_WORDS = [AIRPLANE, BICYCLE, BOAT, BUS, CAR, MOTORBUS, MOTORCYCLE, SEAPLANE, SPEEDBOAT, SURFBOARD, TRAIN, TRIMARAN, TRUCK,
+        BEDROOM, COUCH, BRIDGE];
 
     const LIVING_ROOM_TYPES = [BED, BOOK, CHAIR, CLOCK, COUCH, DINING_TABLE, POTTED_PLANT, TV];
     const TRANSPORT_TYPES = [AIRPLANE, BICYCLE, BOAT, BUS, CAR, MOTORBUS, MOTORCYCLE, SEAPLANE, SPEEDBOAT, SURFBOARD, TRAIN, TRIMARAN, TRUCK];
@@ -120,12 +118,12 @@
 
     // Max Skips that can be done while solving the captcha
     // This is likely not to happen, if it occurs retry for new images
-    const MAX_SKIPS = 10;
+    const MAX_SKIPS = 20;
     var skipCount = 0;
 
     var USE_MOBILE_NET = false;
     var USE_COLOUR_PATTERN = false;
-    var NEW_WORD_IDENTIFIED = false;
+    var NEW_WORD_IDENTIFIED = true;
 
     //Probablility for objects
     var probabilityForObject = new Map();
@@ -1122,7 +1120,7 @@
             }
             identifyObjectsFromImages(exampleImageList);
             while (!identifyObjectsFromImagesCompleted) {
-                await delay(2000)
+                await delay(200)
             }
             identifyObjectsFromImagesCompleted = false;
             word = await getWordFromIdentifiedObjects(identifiedObjectsList);
@@ -1133,7 +1131,7 @@
                 await initializeTensorFlowMobilenetModel();
                 identifyObjectsFromImagesUsingMobileNet(exampleImageList);
                 while (!identifyObjectsFromImagesCompleted) {
-                    await delay(2000)
+                    await delay(200)
                 }
                 identifyObjectsFromImagesCompleted = false;
 

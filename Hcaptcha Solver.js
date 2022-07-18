@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Hcaptcha Solver
 // @namespace    Captchus Challenger Identfy
-// @version      8.1
+// @version      8.2
 // @description  Automatically solves Hcaptcha in Browser
 // @author       Moryata
 // @match        https://*.hcaptcha.com/*
@@ -42,7 +42,7 @@
 
     //Guess/Match New Images
     const MATCH_IMAGES_USING_TRAINER = false;
-    const GUESS_NEW_IMAGE_TYPE = true;
+    const GUESS_NEW_IMAGE_TYPE = false;
 
     //Node Selectors
     const CHECK_BOX = "#checkbox";
@@ -95,6 +95,7 @@
     const CAT = "cat";
     const DOMESTICCAT = "domestic cat";
     const DOG = "dog";
+    const LION = "lion";
 
     // Vertical River
     const VALLEY = "valley";
@@ -105,7 +106,7 @@
 
     const LIVING_ROOM_TYPES = [BED, BOOK, CHAIR, CLOCK, COUCH, DINING_TABLE, POTTED_PLANT, TV];
     const TRANSPORT_TYPES = [AIRPLANE, BICYCLE, BOAT, BUS, CAR, MOTORBUS, MOTORCYCLE, SEAPLANE, SPEEDBOAT, SURFBOARD, TRAIN, TRIMARAN, TRUCK];
-    const ANIMAL_TYPES = [ZEBRA, CAT, DOG];
+    const ANIMAL_TYPES = [ZEBRA, CAT, DOG, DOMESTICCAT, LION];
 
     const SENTENCE_TEXT_A = "Please click each image containing a ";
     const SENTENCE_TEXT_AN = "Please click each image containing an ";
@@ -121,9 +122,9 @@
     const MAX_SKIPS = 20;
     var skipCount = 0;
 
-    var USE_MOBILE_NET = false;
+    var USE_MOBILE_NET = true;
     var USE_COLOUR_PATTERN = false;
-    var NEW_WORD_IDENTIFIED = true;
+    var NEW_WORD_IDENTIFIED = false;
 
     //Probablility for objects
     var probabilityForObject = new Map();
@@ -579,11 +580,14 @@
             word = ['bed', 'couch', 'chair', 'potted plant', 'dining table', 'clock', 'tv', 'book']
         } else if (word == ZEBRA) {
             word = ['zebra']
-        } else if (word == CAT) {
+        } else if (word == DOMESTICCAT) {
             word = ['cat']
             USE_MOBILE_NET = true;
-        } else if (word == DOMESTICCAT) {
+        } else if (word == CAT) {
             word = ['domestic cat']
+            USE_MOBILE_NET = true;
+        } else if (word == LION) {
+            word = ['lion']
             USE_MOBILE_NET = true;
         } else if (word == DOG) {
             word = ['dog']
@@ -813,14 +817,14 @@
                     params: [20]
                 }
 
-            ]).contrast(1).color([
+            ]).contrast(2).color([
 
                 {
                     apply: 'brighten',
                     params: [20]
                 }
 
-            ]).contrast(1).greyscale().getBase64(Jimp.AUTO, function(err, src) {
+            ]).contrast(2).greyscale().getBase64(Jimp.AUTO, function(err, src) {
                 var img = document.createElement("img");
                 img.setAttribute("src", src);
 
@@ -842,7 +846,7 @@
     function preProcessImageMethod3(base64Image, imageUrl) {
         //Multi Contrast only brighten
         Jimp.read(base64Image).then(function(data) {
-            data.contrast(1).color([{
+            data.contrast(2).color([{
                         apply: 'brighten',
                         params: [20]
             }
@@ -1120,7 +1124,7 @@
             }
             identifyObjectsFromImages(exampleImageList);
             while (!identifyObjectsFromImagesCompleted) {
-                await delay(200)
+                await delay(2000)
             }
             identifyObjectsFromImagesCompleted = false;
             word = await getWordFromIdentifiedObjects(identifiedObjectsList);
@@ -1131,7 +1135,7 @@
                 await initializeTensorFlowMobilenetModel();
                 identifyObjectsFromImagesUsingMobileNet(exampleImageList);
                 while (!identifyObjectsFromImagesCompleted) {
-                    await delay(200)
+                    await delay(2000)
                 }
                 identifyObjectsFromImagesCompleted = false;
 

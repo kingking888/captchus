@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Hcaptcha Solver
 // @namespace    Captchus Challenger Identfy
-// @version      8.2
+// @version      8.3
 // @description  Automatically solves Hcaptcha in Browser
 // @author       Moryata
 // @match        https://*.hcaptcha.com/*
@@ -21,7 +21,6 @@
 // @require      https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet
 // ==/UserScript==
 (async function() {
-
     //TODO: Enable debug mode to print console logs
     //TODO: Refactor Code for different models
     'use strict';
@@ -42,7 +41,7 @@
 
     //Guess/Match New Images
     const MATCH_IMAGES_USING_TRAINER = false;
-    const GUESS_NEW_IMAGE_TYPE = false;
+    const GUESS_NEW_IMAGE_TYPE = true;
 
     //Node Selectors
     const CHECK_BOX = "#checkbox";
@@ -96,6 +95,7 @@
     const DOMESTICCAT = "domestic cat";
     const DOG = "dog";
     const LION = "lion";
+    const HORSE = "һorse";
 
     // Vertical River
     const VALLEY = "valley";
@@ -106,7 +106,7 @@
 
     const LIVING_ROOM_TYPES = [BED, BOOK, CHAIR, CLOCK, COUCH, DINING_TABLE, POTTED_PLANT, TV];
     const TRANSPORT_TYPES = [AIRPLANE, BICYCLE, BOAT, BUS, CAR, MOTORBUS, MOTORCYCLE, SEAPLANE, SPEEDBOAT, SURFBOARD, TRAIN, TRIMARAN, TRUCK];
-    const ANIMAL_TYPES = [ZEBRA, CAT, DOG, DOMESTICCAT, LION];
+    const ANIMAL_TYPES = [ZEBRA, CAT, DOG, DOMESTICCAT, LION, HORSE];
 
     const SENTENCE_TEXT_A = "Please click each image containing a ";
     const SENTENCE_TEXT_AN = "Please click each image containing an ";
@@ -260,7 +260,7 @@
                 "Content-Type": "application/x-www-form-urlencoded"
             },
             data: "image=" + encodeURIComponent(imageUrl),
-            timeout: 8000,
+            timeout: 5000,
             onload: function(response) {
                 clickImages(response, imageUrl, word, i)
             },
@@ -335,7 +335,7 @@
                     });
             }
         } catch (err) {
-            console.log(err.message);
+            //console.log(err.message);
         }
     }
 
@@ -408,12 +408,9 @@
     // This approach is only used during urgent scenarios before training the images
     // Image differnce can also be done with the stored images to identify new image based on the existing if they are nearly equal
     function matchImagesUsingTrainer(imageUrl, word, i) {
-
         Jimp.read(imageUrl).then(function(data) {
-
             data.getBase64(Jimp.AUTO, async function(err, src) {
                 var trainerInterval = setInterval(function() {
-
                     if (!qSelectorAll(IMAGE)[i] || !(qSelectorAll(IMAGE)[i].style.background).includes(imageUrl)) {
                         clearInterval(trainerInterval);
                         return;
@@ -535,11 +532,6 @@
 
     async function getSynonyms(word) {
 
-        //USE_MOBILE_NET = true;
-        //USE_COLOUR_PATTERN = false;
-        //NEW_WORD_IDENTIFIED = false;
-
-        //TODO: Format this to JSON string
         if (word == MOTORBUS || word == BUS) {
             word = ['bus', 'motorbus'];
             USE_MOBILE_NET = true;
@@ -589,6 +581,9 @@
         } else if (word == LION) {
             word = ['lion']
             USE_MOBILE_NET = true;
+        } else if (word == HORSE) {
+            word = ['horse', 'riding horse', 'kuda']
+            USE_MOBILE_NET = true;
         } else if (word == DOG) {
             word = ['dog']
         } else if (word == VALLEY || word == VERTICAL_RIVER) {
@@ -622,11 +617,11 @@
         }, 5);
     } else {
 
-        //try { await initializeTesseractWorker(); } catch (err) { console.log(err); console.log("Tesseract could not be initialized"); }
+        try { await initializeTesseractWorker(); } catch (err) { console.log("Tesseract could not be initialized"); }
 
-        try { await initializeTensorFlowModel(); } catch (err) { console.log(err); console.log("TF could not be initialized"); }
+        try { await initializeTensorFlowModel(); } catch (err) { console.log("TF could not be initialized"); }
 
-        try { await initializeTensorFlowMobilenetModel(); } catch (err) { console.log(err); console.log("MobileNet could not be initialized"); }
+        try { await initializeTensorFlowMobilenetModel(); } catch (err) { console.log("MobileNet could not be initialized"); }
 
         try {
             selectImages();

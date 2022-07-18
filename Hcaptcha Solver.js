@@ -318,7 +318,7 @@
                     .then(function(predictions) {
                         var predictionslen = predictions.length;
                         for (var j = 0; j < predictionslen; j++) {
-                            var probability = 0.055;
+                            var probability = 0.065;
                             if (probabilityForObject.get(predictions[j].className)) {
                                 probability = probabilityForObject.get(predictions[j].className);
                             }
@@ -581,7 +581,7 @@
         } else if (word == ZEBRA) {
             word = ['zebra']
         } else if (word == DOMESTICCAT) {
-            word = ['cat']
+            word = ['cat', 'kitten', 'fluffy cat']
             USE_MOBILE_NET = true;
         } else if (word == CAT) {
             word = ['domestic cat']
@@ -1182,7 +1182,7 @@
                     return word;
                 } else {
                     //Using OCR on Text for accurate result
-                    console.log("New word or different cyrillic");
+                    console.log("New word ..");
                     var img = await convertTextToImage(word);
                     word = await convertImageToText(img);
                     word = word.replace(SENTENCE_TEXT_A, '');

@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Hcaptcha Solver
 // @namespace    Captchus Challenger Identfy
-// @version      8.3
+// @version      8.4
 // @description  Automatically solves Hcaptcha in Browser
 // @author       Moryata
 // @match        https://*.hcaptcha.com/*
@@ -31,7 +31,7 @@
 
     var identifiedObjectsList = [];
     var exampleImageList = [];
-    var identifyObjectsFromImagesCompleted = false;
+    var identifyObjectsFromImagesCompleted = true;
     var currentExampleUrls = [];
 
     //Default Language for hcaptcha
@@ -41,7 +41,7 @@
 
     //Guess/Match New Images
     const MATCH_IMAGES_USING_TRAINER = false;
-    const GUESS_NEW_IMAGE_TYPE = true;
+    const GUESS_NEW_IMAGE_TYPE = false;
 
     //Node Selectors
     const CHECK_BOX = "#checkbox";
@@ -76,8 +76,16 @@
     const SEAPLANE = "seaplane";
     const SPEEDBOAT = "speedboat";
 
-    const BEDROOM = "bedroom";
     const BRIDGE = "bridge";
+    const BEDROOM = "bedroom";
+    const LIVING_ROOM = "living room";
+    const CONFERENCE_ROOM = "conference room";
+
+    const HORSE = "һorse";
+    const LION = "lion";
+    const DOMESTIC_CAT = "domestic cat";
+    const DOG = "dog";
+
 
     //Living Room Objects
     const BED = "bed";
@@ -92,21 +100,29 @@
     //Animals
     const ZEBRA = "zebra";
     const CAT = "cat";
-    const DOMESTICCAT = "domestic cat";
-    const DOG = "dog";
-    const LION = "lion";
-    const HORSE = "һorse";
 
     // Vertical River
     const VALLEY = "valley";
     const VERTICAL_RIVER = "vertical river";
 
-    const KNOWN_WORDS = [AIRPLANE, BICYCLE, BOAT, BUS, CAR, MOTORBUS, MOTORCYCLE, SEAPLANE, SPEEDBOAT, SURFBOARD, TRAIN, TRIMARAN, TRUCK,
-        BEDROOM, COUCH, BRIDGE];
+    // Skippables for now
+    const SMILING_DOG = "smiling dog";
+    const HORSE_CLOUDS = "horse made of clouds";
+
+    const KNOWN_WORDS = [
+        AIRPLANE, BICYCLE, BOAT, BUS, CAR, MOTORBUS, MOTORCYCLE, SEAPLANE, SPEEDBOAT, SURFBOARD, TRAIN, TRIMARAN, TRUCK,
+        COUCH, BRIDGE,
+        BEDROOM, LIVING_ROOM, CONFERENCE_ROOM,
+        HORSE, LION, DOMESTIC_CAT, DOG
+    ];
+
+    const SKIPPABLE_WORDS = [
+        SMILING_DOG, HORSE_CLOUDS
+    ];
 
     const LIVING_ROOM_TYPES = [BED, BOOK, CHAIR, CLOCK, COUCH, DINING_TABLE, POTTED_PLANT, TV];
     const TRANSPORT_TYPES = [AIRPLANE, BICYCLE, BOAT, BUS, CAR, MOTORBUS, MOTORCYCLE, SEAPLANE, SPEEDBOAT, SURFBOARD, TRAIN, TRIMARAN, TRUCK];
-    const ANIMAL_TYPES = [ZEBRA, CAT, DOG, DOMESTICCAT, LION, HORSE];
+    const ANIMAL_TYPES = [ZEBRA, CAT, DOG];
 
     const SENTENCE_TEXT_A = "Please click each image containing a ";
     const SENTENCE_TEXT_AN = "Please click each image containing an ";
@@ -260,7 +276,7 @@
                 "Content-Type": "application/x-www-form-urlencoded"
             },
             data: "image=" + encodeURIComponent(imageUrl),
-            timeout: 5000,
+            timeout: 10000,
             onload: function(response) {
                 clickImages(response, imageUrl, word, i)
             },
@@ -532,6 +548,7 @@
 
     async function getSynonyms(word) {
 
+        //TODO: Format this to JSON string
         if (word == MOTORBUS || word == BUS) {
             word = ['bus', 'motorbus'];
             USE_MOBILE_NET = true;
@@ -566,34 +583,43 @@
             word = ['steel arch bridge', 'pier', 'suspension bridge', 'viaduct']
             USE_MOBILE_NET = true;
         } else if (word == BEDROOM) {
-            word = ['day bed']
+            word = ['day bed', 'four-poster', 'quilt']
+            USE_MOBILE_NET = true;
+        } else if (word == LIVING_ROOM) {
+            word = ['fire screen', 'window shade', 'entertainment center']
+            USE_MOBILE_NET = true;
+        } else if (word == CONFERENCE_ROOM) {
+            word = ['restaurant', 'cinema', 'library', 'dining table', 'bannister', 'loudspeaker', 'maze', 'theater curtain']
+            USE_MOBILE_NET = true;
+        } else if (word == HORSE) {
+            word = ['sorrel', 'Great Dane']
+            USE_MOBILE_NET = true;
+        } else if (word == LION) {
+            word = ['Panthera leo']
+            USE_MOBILE_NET = true;
+        } else if (word == DOMESTIC_CAT) {
+            word = ['Egyptian cat', 'Siamese', 'tabby cat', 'Japanese spaniel', 'Persian cat']
+            USE_MOBILE_NET = true;
+        } else if (word == DOG) {
+            word = ['pit bull', 'Border collie', 'Cardigan Welsh corgi', 'golden retriever', 'Japanese spaniel', 'Chihuahua', 'Dandie Dinmont', 'English foxhound', 'EntleBucher', 'Eskimo dog', 'German shepherd',
+                   'German short-haired pointer', 'Labrador retriever', 'Maltese dog', 'Pomeranian', 'Rhodesian ridgeback', 'Saint Bernard', 'bullterrier', 'Walker hound', 'beagle', 'boxer', 'black-and-tan coonhound',
+                   'Canis dingo', 'toy terrier']
             USE_MOBILE_NET = true;
         } else if (word.includesOneOf(LIVING_ROOM_TYPES)) {
             word = ['bed', 'couch', 'chair', 'potted plant', 'dining table', 'clock', 'tv', 'book']
         } else if (word == ZEBRA) {
             word = ['zebra']
-        } else if (word == DOMESTICCAT) {
-            word = ['cat', 'kitten', 'fluffy cat']
-            USE_MOBILE_NET = true;
         } else if (word == CAT) {
-            word = ['domestic cat']
+            word = ['cat']
             USE_MOBILE_NET = true;
-        } else if (word == LION) {
-            word = ['lion']
-            USE_MOBILE_NET = true;
-        } else if (word == HORSE) {
-            word = ['horse', 'riding horse', 'kuda']
-            USE_MOBILE_NET = true;
-        } else if (word == DOG) {
-            word = ['dog']
-        } else if (word == VALLEY || word == VERTICAL_RIVER) {
-            word = ['alp', 'volcano']
+        } else if (word == VALLEY || word == VERTICAL_RIVER){
+            word = ['alp','volcano']
             USE_COLOUR_PATTERN = true;
         } else {
             NEW_WORD_IDENTIFIED = true;
-            console.log("Word does not match. New type identified::" + word);
+            console.log("Word does not match. New type identified:: " + word);
         }
-
+            console.log('@leaving getSynonyms', word);
         return word
 
     }

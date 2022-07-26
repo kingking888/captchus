@@ -41,7 +41,7 @@
 
     //Guess/Match New Images
     const MATCH_IMAGES_USING_TRAINER = false;
-    const GUESS_NEW_IMAGE_TYPE = true;
+    const GUESS_NEW_IMAGE_TYPE = false;
 
     //Node Selectors
     const CHECK_BOX = "#checkbox";
@@ -334,7 +334,7 @@
                     .then(function(predictions) {
                         var predictionslen = predictions.length;
                         for (var j = 0; j < predictionslen; j++) {
-                            var probability = 0.085;
+                            var probability = 0.055;
                             if (probabilityForObject.get(predictions[j].className)) {
                                 probability = probabilityForObject.get(predictions[j].className);
                             }
@@ -598,7 +598,7 @@
             word = ['Panthera leo']
             USE_MOBILE_NET = true;
         } else if (word == DOMESTIC_CAT) {
-            word = ['Egyptian cat', 'Siamese', 'tabby cat', 'Japanese spaniel', 'Persian cat']
+            word = ['kitten', 'Fluffy cat', 'tabby cat', 'Japanese spaniel', 'Persian cat']
             USE_MOBILE_NET = true;
         } else if (word == DOG) {
             word = ['pit bull', 'Border collie', 'Cardigan Welsh corgi', 'golden retriever', 'Japanese spaniel', 'Chihuahua', 'Dandie Dinmont', 'English foxhound', 'EntleBucher', 'Eskimo dog', 'German shepherd',
@@ -643,7 +643,7 @@
         }, 5);
     } else {
 
-        //try { await initializeTesseractWorker(); } catch (err) { console.log("Tesseract could not be initialized"); }
+        try { await initializeTesseractWorker(); } catch (err) { console.log("Tesseract could not be initialized"); }
 
         //try { await initializeTensorFlowModel(); } catch (err) { console.log("TF could not be initialized"); }
 

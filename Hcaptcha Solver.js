@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Hcaptcha Solver
 // @namespace    Captchus Challenger Identfy
-// @version      8.4
+// @version      8.5
 // @description  Automatically solves Hcaptcha in Browser
 // @author       Moryata
 // @match        https://*.hcaptcha.com/*
@@ -31,7 +31,7 @@
 
     var identifiedObjectsList = [];
     var exampleImageList = [];
-    var identifyObjectsFromImagesCompleted = true;
+    var identifyObjectsFromImagesCompleted = false;
     var currentExampleUrls = [];
 
     //Default Language for hcaptcha
@@ -41,7 +41,7 @@
 
     //Guess/Match New Images
     const MATCH_IMAGES_USING_TRAINER = false;
-    const GUESS_NEW_IMAGE_TYPE = false;
+    const GUESS_NEW_IMAGE_TYPE = true;
 
     //Node Selectors
     const CHECK_BOX = "#checkbox";
@@ -334,7 +334,7 @@
                     .then(function(predictions) {
                         var predictionslen = predictions.length;
                         for (var j = 0; j < predictionslen; j++) {
-                            var probability = 0.065;
+                            var probability = 0.085;
                             if (probabilityForObject.get(predictions[j].className)) {
                                 probability = probabilityForObject.get(predictions[j].className);
                             }
@@ -462,7 +462,7 @@
 
                     }
 
-                }, 3000);
+                }, 5000);
 
             });
         });
@@ -643,9 +643,9 @@
         }, 5);
     } else {
 
-        try { await initializeTesseractWorker(); } catch (err) { console.log("Tesseract could not be initialized"); }
+        //try { await initializeTesseractWorker(); } catch (err) { console.log("Tesseract could not be initialized"); }
 
-        try { await initializeTensorFlowModel(); } catch (err) { console.log("TF could not be initialized"); }
+        //try { await initializeTensorFlowModel(); } catch (err) { console.log("TF could not be initialized"); }
 
         try { await initializeTensorFlowMobilenetModel(); } catch (err) { console.log("MobileNet could not be initialized"); }
 
@@ -897,7 +897,7 @@
         //Resize the image
         Jimp.read(base64Image).then(function(data) {
             data.resize(256, Jimp.AUTO)
-                .quality(90) // set JPEG quality
+                .quality(75) // set JPEG quality
                 .greyscale() // set greyscale
                 .getBase64(Jimp.AUTO, function(err, src) {
                     var img = document.createElement("img");
@@ -1145,7 +1145,7 @@
             }
             identifyObjectsFromImages(exampleImageList);
             while (!identifyObjectsFromImagesCompleted) {
-                await delay(2000)
+                await delay(100)
             }
             identifyObjectsFromImagesCompleted = false;
             word = await getWordFromIdentifiedObjects(identifiedObjectsList);
@@ -1156,7 +1156,7 @@
                 await initializeTensorFlowMobilenetModel();
                 identifyObjectsFromImagesUsingMobileNet(exampleImageList);
                 while (!identifyObjectsFromImagesCompleted) {
-                    await delay(2000)
+                    await delay(100)
                 }
                 identifyObjectsFromImagesCompleted = false;
 
@@ -1273,7 +1273,7 @@
                 } else {
                     //Get Synonyms for the word
                     word = await getSynonyms(word);
-                    console.log("words => " + word);
+                    //console.log("words => " + word);
                 }
 
             } catch (err) {

@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Recaptcha Solver
 // @namespace    Recaptcha Solver
-// @version      2.6
+// @version      2.7
 // @description  Recaptcha Solver in Browser | Automatically solves Recaptcha in browser
 // @author       moryata
 // @match        *://*/recaptcha/*
@@ -33,14 +33,14 @@
     var audioUrl = "";
     var recaptchaInitialStatus = qSelector(RECAPTCHA_STATUS) ? qSelector(RECAPTCHA_STATUS).innerText : ""
     var serversList = ["https://engageub.pythonanywhere.com", "https://engageub1.pythonanywhere.com"];
-    var latencyList = Array(serversList.length).fill(255);
+    var latencyList = Array(serversList.length).fill(5000);
     //Check for visibility && Click the check box
     function isHidden(el) {
         return (el.offsetParent === null)
     }
 
     async function getTextFromAudio(URL) {
-        var minLatency = 255;
+        var minLatency = 5000;
         var url = "";
 
         //Selecting the last/latest server by default if latencies are equal
@@ -66,7 +66,7 @@
                 "Content-Type": "application/x-www-form-urlencoded"
             },
             data: "input=" + encodeURIComponent(URL) + "&lang=" + recaptchaLanguage,
-            timeout: 10000,
+            timeout: 5000,
             onload: function(response) {
                 console.log("Response::" + response.responseText);
                 try {
@@ -111,7 +111,7 @@
                 "Content-Type": "application/x-www-form-urlencoded"
             },
             data: "",
-            timeout: 10000,
+            timeout: 5000,
             onload: function(response) {
 
                 if (response && response.responseText && response.responseText == "0") {
@@ -155,7 +155,7 @@
     var startInterval = setInterval(function() {
         try {
             if (!checkBoxClicked && qSelector(CHECK_BOX) && !isHidden(qSelector(CHECK_BOX))) {
-                //console.log("checkbox clicked");
+                console.log("checkbox clicked");
                 qSelector(CHECK_BOX).click();
                 checkBoxClicked = true;
             }
@@ -172,7 +172,7 @@
             }
             if (!solved) {
                 if (qSelector(AUDIO_BUTTON) && !isHidden(qSelector(AUDIO_BUTTON)) && qSelector(IMAGE_SELECT)) {
-                    // console.log("Audio button clicked");
+                    console.log("Audio button clicked");
                     qSelector(AUDIO_BUTTON).click();
                 }
                 if ((!waitingForAudioResponse && qSelector(AUDIO_SOURCE) && qSelector(AUDIO_SOURCE).src &&

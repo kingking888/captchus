@@ -40,7 +40,7 @@
     }
 
     async function getTextFromAudio(URL) {
-        var minLatency = 200;
+        var minLatency = 5000;
         var url = "";
 
         //Selecting the last/latest server by default if latencies are equal

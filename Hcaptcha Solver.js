@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Hcaptcha Solver
 // @namespace    Captchus Challenger Identfy
-// @version      8.5
+// @version      8.6
 // @description  Automatically solves Hcaptcha in Browser
 // @author       Moryata
 // @match        https://*.hcaptcha.com/*
@@ -85,6 +85,7 @@
     const LION = "lion";
     const DOMESTIC_CAT = "domestic cat";
     const DOG = "dog";
+    const ELEPHANT = "elephant";
 
 
     //Living Room Objects
@@ -113,7 +114,7 @@
         AIRPLANE, BICYCLE, BOAT, BUS, CAR, MOTORBUS, MOTORCYCLE, SEAPLANE, SPEEDBOAT, SURFBOARD, TRAIN, TRIMARAN, TRUCK,
         COUCH, BRIDGE,
         BEDROOM, LIVING_ROOM, CONFERENCE_ROOM,
-        HORSE, LION, DOMESTIC_CAT, DOG
+        HORSE, LION, DOMESTIC_CAT, DOG, ELEPHANT
     ];
 
     const SKIPPABLE_WORDS = [
@@ -122,7 +123,7 @@
 
     const LIVING_ROOM_TYPES = [BED, BOOK, CHAIR, CLOCK, COUCH, DINING_TABLE, POTTED_PLANT, TV];
     const TRANSPORT_TYPES = [AIRPLANE, BICYCLE, BOAT, BUS, CAR, MOTORBUS, MOTORCYCLE, SEAPLANE, SPEEDBOAT, SURFBOARD, TRAIN, TRIMARAN, TRUCK];
-    const ANIMAL_TYPES = [ZEBRA, CAT, DOG];
+    const ANIMAL_TYPES = [ZEBRA, CAT, DOG, HORSE, LION, ELEPHANT];
 
     const SENTENCE_TEXT_A = "Please click each image containing a ";
     const SENTENCE_TEXT_AN = "Please click each image containing an ";
@@ -597,6 +598,9 @@
         } else if (word == LION) {
             word = ['Panthera leo']
             USE_MOBILE_NET = true;
+        } else if (word == ELEPHANT) {
+            word = ['elephant']
+            USE_MOBILE_NET = true;
         } else if (word == DOMESTIC_CAT) {
             word = ['kitten', 'Fluffy cat', 'tabby cat', 'Japanese spaniel', 'Persian cat']
             USE_MOBILE_NET = true;
@@ -652,7 +656,7 @@
         try {
             selectImages();
         } catch (err) {
-            //console.log(err);
+            console.log(err);
             console.log("selectImages error");
         }
     }
@@ -734,7 +738,7 @@
                     qSelector(SUBMIT_BUTTON).click();
                   console.log("Verify");
                 }
-                return selectImagesAfterDelay(5);
+                return selectImagesAfterDelay(1);
             } else if (imageIntervalCount > 8) {
                 clearInterval(imageInterval);
                 return selectImages();
@@ -743,17 +747,17 @@
                 if (qSelector(SUBMIT_BUTTON)) {
                     qSelector(SUBMIT_BUTTON).click();
                 }
-                return selectImagesAfterDelay(5);
+                return selectImagesAfterDelay(1);
             } else if (MATCH_IMAGES_USING_TRAINER && NEW_WORD_IDENTIFIED && imageIntervalCount > 6) {
                 clearInterval(imageInterval);
                 if (qSelector(SUBMIT_BUTTON)) {
                     qSelector(SUBMIT_BUTTON).click();
                 }
-                return selectImagesAfterDelay(5);
+                return selectImagesAfterDelay(1);
             } else {
 
             }
-        }, 3);
+        }, 1);
     }
 
     function waitForImagesToAppear() {

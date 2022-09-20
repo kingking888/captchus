@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Hcaptcha Solver
 // @namespace    Captchus Challenger Identfy
-// @version      8.6
+// @version      8.7
 // @description  Automatically solves Hcaptcha in Browser
 // @author       Moryata
 // @match        https://*.hcaptcha.com/*
@@ -41,7 +41,7 @@
 
     //Guess/Match New Images
     const MATCH_IMAGES_USING_TRAINER = false;
-    const GUESS_NEW_IMAGE_TYPE = false;
+    const GUESS_NEW_IMAGE_TYPE = true;
 
     //Node Selectors
     const CHECK_BOX = "#checkbox";
@@ -86,7 +86,7 @@
     const DOMESTIC_CAT = "domestic cat";
     const DOG = "dog";
     const ELEPHANT = "elephant";
-
+    const RABBIT = "rabbit";
 
     //Living Room Objects
     const BED = "bed";
@@ -97,6 +97,9 @@
     const DINING_TABLE = "dining table";
     const POTTED_PLANT = "potted plant";
     const TV = "tv";
+
+    //toys
+    const TOY_TURTLE = "toy turtle";
 
     //Animals
     const ZEBRA = "zebra";
@@ -109,21 +112,22 @@
     // Skippables for now
     const SMILING_DOG = "smiling dog";
     const HORSE_CLOUDS = "horse made of clouds";
+    const HORSE_WALKING_OR_RUNNING = "horse walking or running.";
 
     const KNOWN_WORDS = [
         AIRPLANE, BICYCLE, BOAT, BUS, CAR, MOTORBUS, MOTORCYCLE, SEAPLANE, SPEEDBOAT, SURFBOARD, TRAIN, TRIMARAN, TRUCK,
-        COUCH, BRIDGE,
+        COUCH, BRIDGE, TOY_TURTLE,
         BEDROOM, LIVING_ROOM, CONFERENCE_ROOM,
-        HORSE, LION, DOMESTIC_CAT, DOG, ELEPHANT
+        HORSE, LION, DOMESTIC_CAT, DOG, ELEPHANT, RABBIT
     ];
 
     const SKIPPABLE_WORDS = [
-        SMILING_DOG, HORSE_CLOUDS
+        SMILING_DOG, HORSE_CLOUDS, HORSE_WALKING_OR_RUNNING
     ];
 
     const LIVING_ROOM_TYPES = [BED, BOOK, CHAIR, CLOCK, COUCH, DINING_TABLE, POTTED_PLANT, TV];
     const TRANSPORT_TYPES = [AIRPLANE, BICYCLE, BOAT, BUS, CAR, MOTORBUS, MOTORCYCLE, SEAPLANE, SPEEDBOAT, SURFBOARD, TRAIN, TRIMARAN, TRUCK];
-    const ANIMAL_TYPES = [ZEBRA, CAT, DOG, HORSE, LION, ELEPHANT];
+    const ANIMAL_TYPES = [ZEBRA, CAT, DOG, HORSE, LION, ELEPHANT, RABBIT];
 
     const SENTENCE_TEXT_A = "Please click each image containing a ";
     const SENTENCE_TEXT_AN = "Please click each image containing an ";
@@ -139,7 +143,7 @@
     const MAX_SKIPS = 20;
     var skipCount = 0;
 
-    var USE_MOBILE_NET = true;
+    var USE_MOBILE_NET = false;
     var USE_COLOUR_PATTERN = false;
     var NEW_WORD_IDENTIFIED = false;
 
@@ -335,7 +339,7 @@
                     .then(function(predictions) {
                         var predictionslen = predictions.length;
                         for (var j = 0; j < predictionslen; j++) {
-                            var probability = 0.055;
+                            var probability = 0.05;
                             if (probabilityForObject.get(predictions[j].className)) {
                                 probability = probabilityForObject.get(predictions[j].className);
                             }
@@ -463,7 +467,7 @@
 
                     }
 
-                }, 5000);
+                }, 8000);
 
             });
         });
@@ -616,6 +620,12 @@
         } else if (word == CAT) {
             word = ['cat']
             USE_MOBILE_NET = true;
+        } else if (word == RABBIT) {
+            word = ['wood rabbit', 'cottontail rabbit', 'hare', 'Angora rabbit']
+            USE_MOBILE_NET = true;
+        } else if (word == TOY_TURTLE) {
+            word = ['hair slide', 'whistle', 'globe artichoke', 'maraca', 'green mamba']
+            USE_MOBILE_NET = true;
         } else if (word == VALLEY || word == VERTICAL_RIVER){
             word = ['alp','volcano']
             USE_COLOUR_PATTERN = true;
@@ -623,7 +633,7 @@
             NEW_WORD_IDENTIFIED = true;
             console.log("Word does not match. New type identified:: " + word);
         }
-            console.log('@leaving getSynonyms', word);
+            console.log('Synonims', word);
         return word
 
     }
@@ -664,7 +674,7 @@
     function selectImagesAfterDelay(delay) {
         setTimeout(function() {
             selectImages();
-        }, delay * 1000);
+        }, delay * 1250);
     }
 
     function triggerEvent(el, type) {
@@ -693,7 +703,7 @@
                 qSelector(SUBMIT_BUTTON).click();
             }
         }
-        return selectImagesAfterDelay(1);
+        return selectImagesAfterDelay(250);
     }
 
     function getUrlFromString(urlString) {
@@ -1273,7 +1283,7 @@
                     if (qSelector(SUBMIT_BUTTON)) {
                         qSelector(SUBMIT_BUTTON).click();
                     }
-                    return selectImagesAfterDelay(5);
+                    return selectImagesAfterDelay(105);
                 } else {
                     //Get Synonyms for the word
                     word = await getSynonyms(word);

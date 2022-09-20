@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Recaptcha Solver
 // @namespace    Recaptcha Solver
-// @version      2.9
+// @version      3.0
 // @description  Recaptcha Solver in Browser | Automatically solves Recaptcha in browser
 // @author       moryata
 // @match        *://*/recaptcha/*
@@ -39,7 +39,7 @@
         return (el.offsetParent === null)
     }
     async function getTextFromAudio(URL) {
-        var minLatency = 1000;
+        var minLatency = 5000;
         var url = "";
 
         //Selecting the last/latest server by default if latencies are equal
@@ -65,7 +65,7 @@
                 "Content-Type": "application/x-www-form-urlencoded"
             },
             data: "input=" + encodeURIComponent(URL) + "&lang=" + recaptchaLanguage,
-            timeout: 25000,
+            timeout: 10000,
             onload: function(response) {
                 console.log("Response::" + response.responseText);
                 try {

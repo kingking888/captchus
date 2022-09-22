@@ -1,18 +1,17 @@
 // ==UserScript==
 // @name         Recaptcha Solver
 // @namespace    Recaptcha Solver
-// @version      3.0
+// @version      3.1
 // @description  Recaptcha Solver in Browser | Automatically solves Recaptcha in browser
-// @author       moryata
+// @author       Moryata
 // @match        *://*/recaptcha/*
-// @connect      engageub.pythonanywhere.com
 // @connect      engageub1.pythonanywhere.com
 // @grant        GM_xmlhttpRequest
 // ==/UserScript==
 (function() {
     'use strict';
     var solved = false;
-    var checkBoxClicked = true;
+    var checkBoxClicked = false;
     var waitingForAudioResponse = false;
     //Node Selectors
     const CHECK_BOX = ".recaptcha-checkbox-border";
@@ -32,8 +31,9 @@
     var recaptchaLanguage = qSelector("html").getAttribute("lang");
     var audioUrl = "";
     var recaptchaInitialStatus = qSelector(RECAPTCHA_STATUS) ? qSelector(RECAPTCHA_STATUS).innerText : ""
-    var serversList = ["https://engageub.pythonanywhere.com", "https://engageub1.pythonanywhere.com"];
+    var serversList = ["https://engageub1.pythonanywhere.com"];
     var latencyList = Array(serversList.length).fill(1000);
+
     //Check for visibility && Click the check box
     function isHidden(el) {
         return (el.offsetParent === null)
@@ -43,7 +43,7 @@
         var url = "";
 
         //Selecting the last/latest server by default if latencies are equal
-        for (let k = 0; k < latencyList.length; k++) {
+        for (var k = 0; k < latencyList.length; k++) {
             if (latencyList[k] <= minLatency) {
                 minLatency = latencyList[k];
                 url = serversList[k];
@@ -56,7 +56,7 @@
             console.log("Recaptcha Language is not recognized");
             recaptchaLanguage = "en";
         }
-        console.log("Recaptcha Language is " + recaptchaLanguage);
+        //console.log("Recaptcha Language is " + recaptchaLanguage);
 
         GM_xmlhttpRequest({
             method: "POST",
@@ -171,7 +171,7 @@
             }
             if (!solved) {
                 if (qSelector(AUDIO_BUTTON) && !isHidden(qSelector(AUDIO_BUTTON)) && qSelector(IMAGE_SELECT)) {
-                    console.log("Audio button clicked");
+                    //console.log("Audio button clicked");
                     qSelector(AUDIO_BUTTON).click();
                 }
                 if ((!waitingForAudioResponse && qSelector(AUDIO_SOURCE) && qSelector(AUDIO_SOURCE).src &&

@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Recaptcha Solver
 // @namespace    Recaptcha Solver
-// @version      3.1
+// @version      3.2
 // @description  Recaptcha Solver in Browser | Automatically solves Recaptcha in browser
 // @author       moryata
 // @match        *://*/recaptcha/*
@@ -26,7 +26,7 @@
     const RECAPTCHA_STATUS = "#recaptcha-accessible-status";
     const DOSCAPTCHA = ".rc-doscaptcha-body";
     const VERIFY_BUTTON = "#recaptcha-verify-button";
-    const MAX_ATTEMPTS = 5;
+    const MAX_ATTEMPTS = 25;
     var requestCount = 0;
     var recaptchaLanguage = qSelector("html").getAttribute("lang");
     var audioUrl = "";
@@ -39,11 +39,11 @@
         return (el.offsetParent === null)
     }
     async function getTextFromAudio(URL) {
-        var minLatency = 5000;
+        var minLatency = 15000;
         var url = "";
 
         //Selecting the last/latest server by default if latencies are equal
-        for (var k = 0; k < latencyList.length; k++) {
+        for (let k = 0; k < latencyList.length; k++) {
             if (latencyList[k] <= minLatency) {
                 minLatency = latencyList[k];
                 url = serversList[k];
@@ -142,19 +142,11 @@
         return document.querySelector(selector);
     }
 
-    if (qSelector(CHECK_BOX)) {
-        qSelector(CHECK_BOX).click();
-    } else if (window.location.href.includes("bframe")) {
-        for (let i = 0; i < serversList.length; i++) {
-            pingTest(serversList[i]);
-        }
-    }
-
     //Solve the captcha using audio
     var startInterval = setInterval(function() {
         try {
             if (!checkBoxClicked && qSelector(CHECK_BOX) && !isHidden(qSelector(CHECK_BOX))) {
-                console.log("checkbox clicked");
+                console.log("Checkbox clicked");
                 qSelector(CHECK_BOX).click();
                 checkBoxClicked = true;
             }

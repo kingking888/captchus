@@ -3,7 +3,7 @@
 // @namespace    Recaptcha Solver
 // @version      3.1
 // @description  Recaptcha Solver in Browser | Automatically solves Recaptcha in browser
-// @author       Moryata
+// @author       moryata
 // @match        *://*/recaptcha/*
 // @connect      engageub1.pythonanywhere.com
 // @grant        GM_xmlhttpRequest
@@ -110,7 +110,7 @@
                 "Content-Type": "application/x-www-form-urlencoded"
             },
             data: "",
-            timeout: 25000,
+            timeout: 10000,
             onload: function(response) {
 
                 if (response && response.responseText && response.responseText == "0") {
@@ -171,7 +171,7 @@
             }
             if (!solved) {
                 if (qSelector(AUDIO_BUTTON) && !isHidden(qSelector(AUDIO_BUTTON)) && qSelector(IMAGE_SELECT)) {
-                    //console.log("Audio button clicked");
+                    console.log("Audio button clicked");
                     qSelector(AUDIO_BUTTON).click();
                 }
                 if ((!waitingForAudioResponse && qSelector(AUDIO_SOURCE) && qSelector(AUDIO_SOURCE).src &&

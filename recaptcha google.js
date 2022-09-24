@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Recaptcha Solver
 // @namespace    Recaptcha Solver
-// @version      3.2
+// @version      3.4
 // @description  Recaptcha Solver in Browser | Automatically solves Recaptcha in browser
 // @author       moryata
 // @match        *://*/recaptcha/*
@@ -26,20 +26,20 @@
     const RECAPTCHA_STATUS = "#recaptcha-accessible-status";
     const DOSCAPTCHA = ".rc-doscaptcha-body";
     const VERIFY_BUTTON = "#recaptcha-verify-button";
-    const MAX_ATTEMPTS = 25;
+    const MAX_ATTEMPTS = 10;
     var requestCount = 0;
     var recaptchaLanguage = qSelector("html").getAttribute("lang");
     var audioUrl = "";
     var recaptchaInitialStatus = qSelector(RECAPTCHA_STATUS) ? qSelector(RECAPTCHA_STATUS).innerText : ""
     var serversList = ["https://engageub1.pythonanywhere.com"];
-    var latencyList = Array(serversList.length).fill(1000);
+    var latencyList = Array(serversList.length).fill(25);
 
     //Check for visibility && Click the check box
     function isHidden(el) {
         return (el.offsetParent === null)
     }
     async function getTextFromAudio(URL) {
-        var minLatency = 15000;
+        var minLatency = 25;
         var url = "";
 
         //Selecting the last/latest server by default if latencies are equal
@@ -49,14 +49,11 @@
                 url = serversList[k];
             }
         }
-
         requestCount = requestCount + 1;
-        URL = URL.replace("recaptcha.net", "google.com");
+        URL = URL.replace("recaptcha.net");
         if (recaptchaLanguage.length < 1) {
-            console.log("Recaptcha Language is not recognized");
             recaptchaLanguage = "en";
         }
-        //console.log("Recaptcha Language is " + recaptchaLanguage);
 
         GM_xmlhttpRequest({
             method: "POST",
@@ -65,14 +62,14 @@
                 "Content-Type": "application/x-www-form-urlencoded"
             },
             data: "input=" + encodeURIComponent(URL) + "&lang=" + recaptchaLanguage,
-            timeout: 10000,
+            timeout: 25000,
             onload: function(response) {
                 console.log("Response::" + response.responseText);
                 try {
                     if (response && response.responseText) {
                         var responseText = response.responseText;
                         //Validate Response for error messages or html elements
-                        if (responseText == "0" || responseText.includes("<") || responseText.includes(">") || responseText.length < 2 || responseText.length > 50) {
+                        if (responseText == "0" || responseText.includes("<") || responseText.includes(">") || responseText.length < 2 || responseText.length > 99) {
                             //Invalid Response, Reload the captcha
                             console.log("Invalid Response. Retrying..");
                         } else if (qSelector(AUDIO_SOURCE) && qSelector(AUDIO_SOURCE).src && audioUrl == qSelector(AUDIO_SOURCE).src && qSelector(AUDIO_RESPONSE) &&
@@ -97,39 +94,6 @@
             ontimeout: function() {
                 console.log("Response Timed out. Retrying..");
                 waitingForAudioResponse = false;
-            },
-        });
-    }
-
-    async function pingTest(url) {
-        var start = new Date().getTime();
-        GM_xmlhttpRequest({
-            method: "POST",
-            url: url,
-            headers: {
-                "Content-Type": "application/x-www-form-urlencoded"
-            },
-            data: "",
-            timeout: 10000,
-            onload: function(response) {
-
-                if (response && response.responseText && response.responseText == "0") {
-                    var end = new Date().getTime();
-                    var milliseconds = end - start;
-
-                    // For large values use Hashmap
-                    for (let i = 0; i < serversList.length; i++) {
-                        if (url == serversList[i]) {
-                            latencyList[i] = milliseconds;
-                        }
-                    }
-                }
-            },
-            onerror: function(e) {
-                console.log(e);
-            },
-            ontimeout: function() {
-                console.log("Ping Test Response Timed out for " + url);
             },
         });
     }
